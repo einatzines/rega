@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#DCD3F3">
+<title>רגע משפחתי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAF7FD; --card:#FFFFFF; --ink:#3E3B4F; --muted:#827E95;
+  --teal:#2F6A63; --mint:#BFE6DF; --teal-l:#E6F5F2; --coral:#F4C2B5; --coral-d:#8A4535; --coral-l:#FDEEE9;
+  --sun:#F7E1A6; --sun-l:#FFF7E0; --lav:#DCD3F3; --lav-l:#F1EDFB; --line:#ECE6F3; --ok:#4E9A6E; --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:linear-gradient(180deg,#F6F1FD 0%,#FDF6F2 55%,#F2FAF8 100%) fixed;color:var(--ink);font-family:Rubik,system-ui,Arial,sans-serif;font-size:17px;line-height:1.55}
+#app{max-width:520px;margin:0 auto;padding:16px 16px 90px;min-height:100vh}
+h1,h2,h3{margin:0 0 .4em;line-height:1.25}
+h1{font-size:30px;font-weight:800}
+h2{font-size:23px;font-weight:700}
+h3{font-size:18px;font-weight:700}
+p{margin:.3em 0 .8em}
+.muted{color:var(--muted);font-size:15px}
+.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:0 4px 18px rgba(120,100,170,.08);margin:12px 0;border:1px solid var(--line)}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px 16px;font:inherit;font-weight:700;font-size:18px;cursor:pointer;margin:10px 0;background:var(--mint);color:var(--teal);box-shadow:0 2px 0 rgba(47,106,99,.12);transition:transform .08s,opacity .2s}
+.btn:active{transform:scale(.98)}
+.btn.sec{background:var(--lav-l);color:#5B4E8C;box-shadow:none}
+.btn.coral{background:var(--coral);color:var(--coral-d)}
+.btn.ghost{background:transparent;box-shadow:none;color:var(--muted);font-weight:500;font-size:16px;padding:10px}
+.btn[disabled]{opacity:.45;cursor:default}
+.row{display:flex;gap:10px}.row>*{flex:1}
+label{display:block;font-weight:500;margin:12px 0 6px}
+input[type=text],input[type=password],input[type=email],textarea,select{width:100%;font:inherit;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+textarea{min-height:92px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#B7A9E6;box-shadow:0 0 0 3px var(--lav-l)}
+.choice{display:flex;gap:8px;flex-wrap:wrap}
+.choice button{flex:1 1 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 10px;font:inherit;cursor:pointer;color:var(--ink)}
+.choice button.on{border-color:#9FD3C9;background:var(--teal-l);color:var(--teal);font-weight:700}
+.hero{text-align:center;padding:26px 6px 6px}
+.logo{font-size:58px;line-height:1}
+.code{font-size:44px;font-weight:800;letter-spacing:8px;text-align:center;color:#6A5BA8;direction:ltr}
+.chip{display:inline-block;padding:5px 12px;border-radius:99px;background:var(--sun-l);margin:3px;font-size:15px}
+.chip.me{background:var(--teal-l);color:var(--teal);font-weight:700}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--muted);margin-bottom:4px}
+.score{background:var(--coral-l);color:var(--coral-d);border-radius:99px;padding:4px 12px;font-weight:700}
+.badge{display:inline-block;font-size:13px;font-weight:700;padding:4px 11px;border-radius:99px;margin-bottom:8px}
+.b-open{background:var(--sun-l);color:#8A6A1E}.b-guess{background:var(--coral-l);color:var(--coral-d)}
+.b-empathy{background:var(--teal-l);color:var(--teal)}.b-puzzle{background:var(--lav-l);color:#5B4E8C}
+.q{font-size:22px;font-weight:700;line-height:1.4;margin:6px 0 14px}
+.ans{padding:12px 14px;border-radius:14px;background:var(--bg);margin:8px 0;border:1px solid var(--line)}
+.ans b{display:block;font-size:14px;color:var(--muted);font-weight:500}
+.big{font-size:20px;font-weight:700}
+.feel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.feel button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 4px;font:inherit;font-size:15px;cursor:pointer;color:var(--ink)}
+.feel button span{display:block;font-size:24px}
+.feel button.on{border-color:#EDA996;background:var(--coral-l);font-weight:700}
+.mark{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font:inherit;font-size:15px;cursor:pointer;margin-top:6px}
+.mark.on{background:var(--coral);border-color:var(--coral);color:var(--coral-d)}
+.clue{background:var(--lav-l);border-radius:14px;padding:14px;margin:8px 0;font-size:19px;font-weight:500}
+.wait{margin-top:10px;font-size:15px;color:var(--muted)}
+.center{text-align:center}
+.celebrate{font-size:54px;text-align:center;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.3);opacity:0}80%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.final{background:linear-gradient(160deg,#FFFFFF,#F6F1FD 60%,#FDF0EB);border:2px solid var(--lav)}
+.final h2{color:var(--teal)}
+.note{background:var(--sun-l);border-radius:14px;padding:14px;margin:8px 0;font-size:18px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#5B4E8C;color:#fff;padding:12px 18px;border-radius:12px;font-size:16px;z-index:9;max-width:90%;text-align:center}
+.demo{background:var(--sun-l);border:1px dashed #E5C877;border-radius:12px;padding:8px 12px;font-size:14px;margin-bottom:8px}
+.qitem{border-bottom:1px solid var(--line);padding:10px 0}
+.qitem small{color:var(--muted)}
+.qitem .acts{display:flex;gap:8px;margin-top:6px}
+.qitem .acts button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+.help{background:var(--lav-l);border-radius:12px;padding:10px 14px;font-size:14px;margin:8px 0}
+.checks label{display:inline-flex;align-items:center;gap:6px;margin:4px 10px 4px 0;font-weight:400}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast" style="display:none"></div>
+
+<script>
+// ===== הגדרות המשחק =====
+// 1. שם המשחק כפי שיופיע במסך הפתיחה (אפשר לשנות בכל רגע)
+window.GAME_NAME = 'רגע משפחתי';
+
+// 2. המייל של המנחה: רק החשבון הזה יוכל לערוך את מאגר השאלות
+//    (צריך להופיע גם בקובץ firestore.rules)
+window.ADMIN_EMAIL = 'lotan.einat@gmail.com';
+
+// 3. פרטי החיבור ל-Firebase: מעתיקים מהקונסול של Firebase
+//    (Project settings > Your apps > Web app > Config)
+//    כל עוד כאן כתוב PASTE, המשחק עובד ב"מצב הדגמה" על מכשיר אחד בלבד.
+window.FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyC3nIWp8aH4UgE-2U9wCgFrYiQB9rHC6bo',
+  authDomain: 'family-game-2413e.firebaseapp.com',
+  projectId: 'family-game-2413e',
+  storageBucket: 'family-game-2413e.firebasestorage.app',
+  messagingSenderId: '836719710825',
+  appId: '1:836719710825:web:0b7d2b82b0d069a82c48f8'
+};
+
+</script>
+<script>
+// מאגר השאלות ההתחלתי של המשחק.
+// סימונים בטקסט:
+//   {ש}          = שם המשתתף שהשאלה עליו
+//   [זכר|נקבה]   = נוסח לפי לשון הפנייה (בשאלות פתוחות לפי מי שקורא, בשאלות ניחוש ואמפתיה לפי מי שהשאלה עליו)
+// מצבים (modes): p = הורים, s = אחים, f = כל המשפחה
+// על מי (about): any = כל אחד, parent = הורה, child = ילד/ה
+// מי עונה בשאלה פתוחה (who): בלי = כולם, parent = רק ההורים, child = רק הילדים
+
+window.TOPICS = {
+  pc:      { name: 'יחסי הורים וילדים', general: true },
+  sib:     { name: 'קשר בין אחים', general: true },
+  rules:   { name: 'מותר ואסור בבית', general: true },
+  quality: { name: 'זמן איכות', general: true },
+  fun:     { name: 'היכרות וכיף', general: true },
+  couple:  { name: 'זוגיות', general: false },
+  teens:   { name: 'בני נוער', general: false },
+  distant: { name: 'אחים שהתרחקו', general: false },
+  newbaby: { name: 'אח או אחות חדשים', general: false },
+  reserve: { name: 'תקופת מילואים', general: false }
+};
+
+window.DEFAULT_QUESTIONS = [
+  // ---------- שאלות פתוחות: כולם עונים ----------
+  { id:'o1',  t:'open', topic:'fun', modes:'psf', text:'אם [היית יכול|היית יכולה] לקבל כוח-על אחד לשבוע, מה [היית בוחר|היית בוחרת] ולמה?' },
+  { id:'o2',  t:'open', topic:'fun', modes:'psf', text:'איזה שיר הכי מתאים למשפחה שלנו, ולמה?' },
+  { id:'o3',  t:'open', topic:'fun', modes:'psf', text:'איזה מאכל מזכיר לך בית?' },
+  { id:'o4',  t:'open', topic:'fun', modes:'sf',  text:'אם [היית מתחלף|היית מתחלפת] ליום אחד עם מישהו מהמשפחה, עם מי ומה היית עושה באותו יום?' },
+  { id:'o5',  t:'open', topic:'fun', modes:'psf', text:'מה הדבר הכי מצחיק שקרה לך השבוע?' },
+  { id:'o6',  t:'open', topic:'pc',  modes:'sf',  text:'[ספר|ספרי] על רגע שבו הרגשת שמישהו במשפחה באמת הבין אותך.' },
+  { id:'o7',  t:'open', topic:'pc',  modes:'psf', text:'מה דבר קטן שמישהו במשפחה עושה, שגורם לך להרגיש [אהוב|אהובה]?' },
+  { id:'o8',  t:'open', topic:'pc',  modes:'psf', text:'במה [אתה גאה|את גאה] בעצמך לאחרונה, ואולי לא כולם יודעים?' },
+  { id:'o9',  t:'open', topic:'pc',  modes:'psf', text:'מה הכי עוזר לך [כשאתה כועס|כשאת כועסת]: שיתנו לך מרחב, שידברו איתך, או משהו אחר?' },
+  { id:'o10', t:'open', topic:'pc',  modes:'psf', text:'איזה זיכרון ילדות שלך היית רוצה שכולם ישמעו?' },
+  { id:'o11', t:'open', topic:'sib', modes:'sf',  text:'במידה ואין לך הרבה זמן איכות עם האחים שלך, מה הדבר שהיה לך הכי כיף לעשות עם אח או אחות שלך?' },
+  { id:'o12', t:'open', topic:'sib', modes:'sf',  text:'מה הזיכרון הכי מצחיק שלך עם אח או אחות?' },
+  { id:'o13', t:'open', topic:'sib', modes:'sf',  text:'במה אח או אחות שלך עזרו לך פעם, אולי אפילו בלי לדעת?' },
+  { id:'o14', t:'open', topic:'sib', modes:'sf',  text:'איזו תכונה של אח או אחות שלך היית רוצה שתהיה גם לך?' },
+  { id:'o15', t:'open', topic:'rules', modes:'psf', text:'איזה כלל בבית הכי הגיוני בעינייך, ולמה?' },
+  { id:'o16', t:'open', topic:'rules', modes:'psf', text:'אם [היית יכול|היית יכולה] להוסיף לבית כלל אחד חדש וכיפי, מה הוא היה?' },
+  { id:'o17', t:'open', topic:'rules', modes:'sf', who:'child', text:'איזה כלל בבית הכי קשה לך לשמור, ומה היה עוזר לך?' },
+  { id:'o43', t:'open', topic:'pc', modes:'sf', who:'child', text:'מה הדבר שהכי חשוב לך בקשר שלך עם ההורים?' },
+  { id:'o18', t:'open', topic:'rules', modes:'psf', text:'מה ההבדל בעינייך בין כלל שנותן ביטחון לבין כלל שמרגיש כמו עונש?' },
+  { id:'o19', t:'open', topic:'rules', modes:'pf',  text:'איך היית רוצה שנחליט יחד על זמן מסכים בבית?' },
+  { id:'o20', t:'open', topic:'quality', modes:'psf', text:'מה הפעילות המשפחתית הכי טובה שהייתה לנו, ולמה דווקא היא?' },
+  { id:'o21', t:'open', topic:'quality', modes:'psf', text:'אם היה לנו יום שלם בלי טלפונים, מה היית רוצה שנעשה?' },
+  { id:'o22', t:'open', topic:'quality', modes:'sf',  text:'מה היית רוצה לעשות בקרוב בזמן אחד-על-אחד עם כל אחד מבני המשפחה?' },
+  { id:'o23', t:'open', topic:'quality', modes:'psf', text:'באיזה זמן ביום הכי נוח לך לדבר, ובאיזה עדיף שיחכו לך?' },
+  { id:'o24', t:'open', topic:'couple', modes:'p', text:'מה הכי הצחיק אותך אצל הילדים השבוע?' },
+  { id:'o25', t:'open', topic:'couple', modes:'p', text:'באיזה רגע לאחרונה הרגשת שאנחנו צוות טוב כהורים?' },
+  { id:'o29', t:'open', topic:'couple', modes:'p', text:'על מה היית רוצה להגיד לבן או בת הזוג תודה השבוע?' },
+  { id:'o30', t:'open', topic:'teens', modes:'psf', text:'מה הכי שונה בלהיות נער או נערה היום, לעומת כשההורים היו בגיל הזה?' },
+  { id:'o31', t:'open', topic:'teens', modes:'pf',  text:'מה דבר אחד שהיה עוזר להורים ולבני הנוער בבית לריב פחות?' },
+  { id:'o32', t:'open', topic:'teens', modes:'sf',  text:'באיזה תחום [אתה רוצה|את רוצה] יותר עצמאות, ובאיזה תחום דווקא נעים לך שיעזרו?' },
+  { id:'o33', t:'open', topic:'teens', modes:'psf', text:'מה הדרך הכי טובה להעיר לך על משהו, בלי שזה יהפוך לריב?' },
+  { id:'o34', t:'open', topic:'distant', modes:'sf', text:'מה הכי אהבתם לעשות יחד כשהייתם קטנים?' },
+  { id:'o35', t:'open', topic:'distant', modes:'s',  text:'מה השתנה בינינו בשנים האחרונות, ומה היית רוצה להחזיר?' },
+  { id:'o36', t:'open', topic:'distant', modes:'sf', text:'מה משהו קטן שהיה גורם לך להרגיש [קרוב|קרובה] יותר לאח או לאחות שלך?' },
+  { id:'o37', t:'open', topic:'newbaby', modes:'psf', text:'מה הכי מסקרן אותך בתינוק או בתינוקת שבדרך?' },
+  { id:'o38', t:'open', topic:'newbaby', modes:'sf',  text:'איזה תפקיד היית רוצה לקחת כשהתינוק יגיע?' },
+  { id:'o39', t:'open', topic:'newbaby', modes:'psf', text:'ממה קצת חוששים כשמשפחה גדלה, ומה יכול לעזור?' },
+  { id:'o40', t:'open', topic:'reserve', modes:'psf', text:'מה הכי חסר לך כשמישהו מהמשפחה לא בבית לתקופה ארוכה?' },
+  { id:'o41', t:'open', topic:'reserve', modes:'psf', text:'איזה מנהג קטן יכול לעזור לנו להרגיש מחוברים גם מרחוק?' },
+  { id:'o42', t:'open', topic:'reserve', modes:'psf', text:'מה היה הרגע הכי טוב כשכולם חזרו להיות יחד?' },
+  { id:'o46', t:'open', topic:'fun', modes:'psf', text:'מה הזיכרון הכי מוקדם שלך?' },
+  { id:'o47', t:'open', topic:'fun', modes:'psf', text:'איזה מקום מהילדות שלך היית רוצה להראות לכולם, ולמה?' },
+  { id:'o48', t:'open', topic:'sib', modes:'sf',  text:'איזה זיכרון ילדות משותף שלנו הכי מצחיק אותך עד היום?' },
+  { id:'o49', t:'open', topic:'pc',  modes:'pf',  text:'איזה רגע מהילדות שלך היית רוצה שהילדים שלך יחוו גם?' },
+  { id:'o50', t:'open', topic:'sib', modes:'sf', who:'child', text:'איך [היית מעדיף|היית מעדיפה] שהאחים שלך יפנו אליך, כדי לחזק את הקשר ביניכם?' },
+  { id:'o51', t:'open', topic:'quality', modes:'psf', text:'אם היינו קובעים יום כיף משפחתי פעם בחודש, מה היה בתוכנית?' },
+  { id:'o52', t:'open', topic:'quality', modes:'psf', text:'איזה בילוי משפחתי היית רוצה לנסות שעוד לא עשינו?' },
+  { id:'o53', t:'open', topic:'quality', modes:'pf',  text:'איזה בילוי חודשי קבוע יכול להתאים לכל אחד ואחת מאיתנו?' },
+  { id:'cp1',  t:'open', topic:'couple', modes:'p', text:'מה הרגע הכי טוב שהיה לנו כזוג בחודש האחרון?' },
+  { id:'cp2',  t:'open', topic:'couple', modes:'p', text:'מה דבר קטן שבן או בת הזוג עושים ביום-יום, שגורם לך להרגיש [אהוב|אהובה]?' },
+  { id:'cp3',  t:'open', topic:'couple', modes:'p', text:'איזו תכונה של בן או בת הזוג משכה אותך כשהכרתם, ועדיין קיימת היום?' },
+  { id:'cp4',  t:'open', topic:'couple', modes:'p', text:'מה היית רוצה שנעשה רק שנינו, עכשיו שהילדים גדולים יותר?' },
+  { id:'cp5',  t:'open', topic:'couple', modes:'p', text:'איזה חלום שלך היית רוצה שנגשים יחד בשנים הקרובות?' },
+  { id:'cp6',  t:'open', topic:'couple', modes:'p', text:'מה עוזר לך להרגיש שאנחנו צוות, גם כשאנחנו לא מסכימים על הילדים?' },
+  { id:'cp7',  t:'open', topic:'couple', modes:'p', text:'איך היית רוצה שנתפייס אחרי ויכוח?' },
+  { id:'cp8',  t:'open', topic:'couple', modes:'p', text:'איזו מסורת זוגית הכי חשובה לך, או שהיית רוצה שתהיה לנו?' },
+  { id:'cp9',  t:'open', topic:'couple', modes:'p', text:'איך נראה בעינייך ערב זוגי מושלם?' },
+  { id:'cp10', t:'open', topic:'couple', modes:'p', text:'מה החלטה טובה שקיבלנו יחד, [שאתה גאה|שאת גאה] בה?' },
+  { id:'cp11', t:'open', topic:'couple', modes:'p', text:'כשהילדים יעזבו את הבית, מה הכי מרגש אותך שנעשה יחד?' },
+  { id:'cp12', t:'open', topic:'couple', modes:'p', text:'במה הזוגיות שלנו התחזקה בשנים האחרונות?' },
+
+  // ---------- מפת הלב: מנחשים מה מישהו יענה ----------
+  { id:'g1',  t:'guess', topic:'fun', modes:'psf', about:'any', q:'מה המאכל ש{ש} הכי [אוהב|אוהבת]?', self:'מה המאכל [שאתה הכי אוהב|שאת הכי אוהבת]?' },
+  { id:'g2',  t:'guess', topic:'fun', modes:'psf', about:'any', q:'לאיזה מקום בעולם {ש} הכי [היה רוצה|הייתה רוצה] לטוס?', self:'לאיזה מקום בעולם הכי היית רוצה לטוס?' },
+  { id:'g3',  t:'guess', topic:'pc',  modes:'psf', about:'any', q:'מה הכי מרגיע את {ש} אחרי יום קשה?', self:'מה הכי מרגיע אותך אחרי יום קשה?' },
+  { id:'g4',  t:'guess', topic:'fun', modes:'psf', about:'any', q:'איזו סדרה או סרט {ש} [יכול|יכולה] לראות שוב ושוב?', self:'איזו סדרה או סרט [אתה יכול|את יכולה] לראות שוב ושוב?' },
+  { id:'g5',  t:'guess', topic:'pc',  modes:'psf', about:'any', q:'מה גורם ל{ש} להרגיש [מוערך|מוערכת]?', self:'מה גורם לך להרגיש [מוערך|מוערכת]?' },
+  { id:'g6',  t:'guess', topic:'fun', modes:'psf', about:'any', q:'מה הפחד הכי מצחיק או מוזר של {ש}?', self:'מה הפחד הכי מצחיק או מוזר שלך?' },
+  { id:'g7',  t:'guess', topic:'quality', modes:'psf', about:'any', q:'מה הבילוי המושלם של {ש} בסוף שבוע?', self:'מה הבילוי המושלם שלך בסוף שבוע?' },
+  { id:'g8',  t:'guess', topic:'pc',  modes:'f', about:'child',  q:'מה {ש} [היה רוצה שההורים יעשו איתו|הייתה רוצה שההורים יעשו איתה] יותר?', self:'מה היית רוצה שההורים יעשו איתך יותר?' },
+  { id:'g9',  t:'guess', topic:'pc',  modes:'f', about:'parent', q:'מה {ש} הכי [אהב לעשות כשהיה ילד|אהבה לעשות כשהייתה ילדה]?', self:'מה הכי אהבת לעשות [כשהיית ילד|כשהיית ילדה]?' },
+  { id:'g10', t:'guess', topic:'pc',  modes:'pf', about:'parent', q:'איזה חלום {ש} [היה רוצה|הייתה רוצה] להגשים?', self:'איזה חלום היית רוצה להגשים?' },
+  { id:'g11', t:'guess', topic:'sib', modes:'sf', about:'child', q:'מה {ש} הכי [אוהב|אוהבת] לעשות עם אח או אחות?', self:'מה [אתה הכי אוהב|את הכי אוהבת] לעשות עם אח או אחות?' },
+  { id:'g12', t:'guess', topic:'rules', modes:'psf', about:'any', q:'איזה כלל בבית {ש} [היה משנה אם היה יכול|הייתה משנה אם הייתה יכולה]?', self:'איזה כלל בבית היית משנה אם [היית יכול|היית יכולה]?' },
+  { id:'g13', t:'guess', topic:'quality', modes:'psf', about:'any', q:'מה הזמן הכי טוב ביום לדבר עם {ש}?', self:'מה הזמן הכי טוב ביום לדבר איתך?' },
+  { id:'g14', t:'guess', topic:'fun', modes:'psf', about:'any', q:'מה {ש} [היה עושה|הייתה עושה] עם מיליון שקל?', self:'מה היית עושה עם מיליון שקל?' },
+  { id:'g15', t:'guess', topic:'teens', modes:'sf', about:'child', q:'מה הכי מעסיק את {ש} בתקופה הזאת?', self:'מה הכי מעסיק אותך בתקופה הזאת?' },
+  { id:'g16', t:'guess', topic:'teens', modes:'sf', about:'child', q:'באיזו אפליקציה {ש} הכי [משתמש|משתמשת]?', self:'באיזו אפליקציה [אתה הכי משתמש|את הכי משתמשת]?' },
+  { id:'g18', t:'guess', topic:'couple', modes:'p', about:'parent', q:'איזה רגע מהדייט הראשון שלנו {ש} הכי [זוכר|זוכרת]?', self:'איזה רגע מהדייט הראשון שלנו [אתה הכי זוכר|את הכי זוכרת]?' },
+  { id:'g19', t:'guess', topic:'couple', modes:'p', about:'parent', q:'מה {ש} [צריך|צריכה] כדי להיטען אחרי שבוע עמוס?', self:'מה [אתה צריך|את צריכה] כדי להיטען אחרי שבוע עמוס?' },
+  { id:'g21', t:'guess', topic:'couple', modes:'p', about:'parent', q:'איזו מחמאה {ש} הכי [שמח|שמחה] לשמוע?', self:'איזו מחמאה [אתה הכי שמח|את הכי שמחה] לשמוע?' },
+  { id:'g22', t:'guess', topic:'distant', modes:'s', about:'child', q:'מה הזיכרון הכי טוב של {ש} מהילדות שלכם יחד?', self:'מה הזיכרון הכי טוב שלך מהילדות שלכם יחד?' },
+  { id:'g23', t:'guess', topic:'distant', modes:'sf', about:'child', q:'מה {ש} [היה רוצה|הייתה רוצה] לעשות יחד עם אח או אחות?', self:'מה היית רוצה לעשות יחד עם אח או אחות?' },
+  { id:'g24', t:'guess', topic:'reserve', modes:'psf', about:'any', q:'מה הכי חסר ל{ש} כשמישהו מהמשפחה רחוק?', self:'מה הכי חסר לך כשמישהו מהמשפחה רחוק?' },
+  { id:'g25', t:'guess', topic:'newbaby', modes:'sf', about:'child', q:'איזה שם {ש} [היה בוחר|הייתה בוחרת] לתינוק?', self:'איזה שם [היית בוחר|היית בוחרת] לתינוק?' },
+  { id:'g26', t:'guess', topic:'fun', modes:'psf', about:'any', q:'איזה תחביב {ש} [היה רוצה|הייתה רוצה] לנסות?', self:'איזה תחביב היית רוצה לנסות?' },
+  { id:'g27', t:'guess', topic:'fun', modes:'psf', about:'any', q:'במה {ש} הכי [טוב|טובה]?', self:'במה [אתה הכי טוב|את הכי טובה]?' },
+  { id:'g29', t:'guess', topic:'pc', modes:'f', about:'parent', q:'איזה משחק {ש} הכי [אהב|אהבה] לשחק בילדות?', self:'איזה משחק הכי אהבת לשחק בילדות?' },
+  { id:'g30', t:'guess', topic:'sib', modes:'sf', about:'child', q:'איך {ש} [היה מעדיף שהאחים יפנו אליו|הייתה מעדיפה שהאחים יפנו אליה] כדי להתקרב?', self:'איך [היית מעדיף|היית מעדיפה] שהאחים יפנו אליך כדי להתקרב?' },
+  { id:'g31', t:'guess', topic:'quality', modes:'psf', about:'any', q:'לאיזה בילוי משפחתי {ש} הכי [היה רוצה|הייתה רוצה] לצאת החודש?', self:'לאיזה בילוי משפחתי הכי היית רוצה לצאת החודש?' },
+  { id:'cg1', t:'guess', topic:'couple', modes:'p', about:'parent', q:'מה {ש} הכי [מעריך|מעריכה] בזוגיות שלנו?', self:'מה [אתה הכי מעריך|את הכי מעריכה] בזוגיות שלנו?' },
+  { id:'cg2', t:'guess', topic:'couple', modes:'p', about:'parent', q:'איזה בילוי זוגי {ש} הכי [היה רוצה|הייתה רוצה] לעשות החודש?', self:'איזה בילוי זוגי הכי היית רוצה לעשות החודש?' },
+  { id:'cg3', t:'guess', topic:'couple', modes:'p', about:'parent', q:'איזה דבר קטן {ש} הכי [שמח שעושים בשבילו|שמחה שעושים בשבילה]?', self:'איזה דבר קטן [אתה הכי שמח|את הכי שמחה] שעושים בשבילך?' },
+  { id:'cg4', t:'guess', topic:'couple', modes:'p', about:'parent', q:'מה {ש} [צריך מבן או בת הזוג כשקשה לו|צריכה מבן או בת הזוג כשקשה לה]?', self:'מה [אתה צריך|את צריכה] מבן או בת הזוג כשקשה לך?' },
+  { id:'cg5', t:'guess', topic:'couple', modes:'p', about:'parent', q:'איזה זיכרון זוגי {ש} הכי [אוהב|אוהבת]?', self:'איזה זיכרון זוגי [אתה הכי אוהב|את הכי אוהבת]?' },
+  { id:'cg6', t:'guess', topic:'couple', modes:'p', about:'parent', q:'איזה חלום {ש} [מחכה|מחכה] להגשים כשהילדים יגדלו?', self:'איזה חלום [אתה מחכה|את מחכה] להגשים כשהילדים יגדלו?' },
+
+  // ---------- בנעליים של: מנחשים איך מישהו מרגיש ----------
+  { id:'e1',  t:'empathy', topic:'pc', modes:'sf', about:'child', q:'{ש} [ביקש|ביקשה] משהו חשוב מההורים, והם אמרו לא בלי להסביר.', self:'ביקשת משהו חשוב מההורים, והם אמרו לא בלי להסביר.' },
+  { id:'e2',  t:'empathy', topic:'sib', modes:'sf', about:'child', q:'אח או אחות של {ש} נכנסו [לחדר שלו|לחדר שלה] בלי לדפוק ולקחו משהו.', self:'אח או אחות נכנסו לחדר שלך בלי לדפוק ולקחו משהו.' },
+  { id:'e3',  t:'empathy', topic:'pc', modes:'f',  about:'parent', q:'{ש} [חזר|חזרה] מיום עבודה ארוך, וכולם בבית התחילו לבקש [ממנו|ממנה] דברים בבת אחת.', self:'חזרת מיום עבודה ארוך, וכולם בבית התחילו לבקש ממך דברים בבת אחת.' },
+  { id:'e4',  t:'empathy', topic:'fun', modes:'psf', about:'any', q:'{ש} [קיבל|קיבלה] מחמאה מפתיעה מול כולם.', self:'קיבלת מחמאה מפתיעה מול כולם.' },
+  { id:'e5',  t:'empathy', topic:'rules', modes:'f', about:'any', q:'קבעו בבית כלל חדש בלי לשאול את {ש}.', self:'קבעו בבית כלל חדש בלי לשאול אותך.' },
+  { id:'e6',  t:'empathy', topic:'quality', modes:'psf', about:'any', q:'{ש} [תכנן|תכננה] ערב משפחתי, ובסוף כל אחד היה עסוק בטלפון.', self:'תכננת ערב משפחתי, ובסוף כל אחד היה עסוק בטלפון.' },
+  { id:'e7',  t:'empathy', topic:'teens', modes:'sf', about:'child', q:'החברים של {ש} יצאו לבלות ושכחו [להזמין אותו|להזמין אותה].', self:'החברים שלך יצאו לבלות ושכחו להזמין אותך.' },
+  { id:'e8',  t:'empathy', topic:'teens', modes:'sf', about:'child', q:'{ש} [עבד קשה על מבחן וקיבל|עבדה קשה על מבחן וקיבלה] ציון נמוך מהצפוי.', self:'עבדת קשה על מבחן וקיבלת ציון נמוך מהצפוי.' },
+  { id:'e9',  t:'empathy', topic:'sib', modes:'sf', about:'any', q:'אח או אחות של {ש} [עזרו לו בלי שביקש|עזרו לה בלי שביקשה].', self:'אח או אחות עזרו לך בלי שביקשת.' },
+  { id:'e10', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'{ש} [ניסה|ניסתה] לספר משהו חשוב, אבל כולם היו עסוקים ולא הקשיבו.', self:'ניסית לספר משהו חשוב, אבל כולם היו עסוקים ולא הקשיבו.' },
+  { id:'e11', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'בן או בת הזוג [הפתיעו את {ש}|הפתיעו את {ש}] בארוחה שהכינו במיוחד.', self:'בן או בת הזוג הפתיעו אותך בארוחה שהכינו במיוחד.' },
+  { id:'e12', t:'empathy', topic:'distant', modes:'s', about:'child', q:'אח או אחות [שלחו ל{ש}|שלחו ל{ש}] הודעה, אחרי הרבה זמן שלא דיברו.', self:'אח או אחות שלחו לך הודעה, אחרי הרבה זמן שלא דיברתם.' },
+  { id:'e13', t:'empathy', topic:'newbaby', modes:'sf', about:'child', q:'כולם מתעסקים בתינוק החדש, ו{ש} [מחכה שמישהו ישים לב גם אליו|מחכה שמישהו ישים לב גם אליה].', self:'כולם מתעסקים בתינוק החדש, [ואתה מחכה|ואת מחכה] שמישהו ישים לב גם אליך.' },
+  { id:'e14', t:'empathy', topic:'reserve', modes:'psf', about:'any', q:'מישהו מהמשפחה חוזר הביתה אחרי תקופה ארוכה, ו{ש} [פותח|פותחת] לו את הדלת.', self:'מישהו מהמשפחה חוזר הביתה אחרי תקופה ארוכה, [ואתה פותח|ואת פותחת] לו את הדלת.' },
+  { id:'e15', t:'empathy', topic:'pc', modes:'psf', about:'any', q:'{ש} [ביקש סליחה אחרי ויכוח וקיבל|ביקשה סליחה אחרי ויכוח וקיבלה] חיבוק.', self:'ביקשת סליחה אחרי ויכוח וקיבלת חיבוק.' },
+  { id:'ce1', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'{ש} [חזר הביתה, ובן או בת הזוג חיכו לו|חזרה הביתה, ובן או בת הזוג חיכו לה] עם כוס קפה ושאלו איך עבר היום.', self:'חזרת הביתה, ובן או בת הזוג חיכו לך עם כוס קפה ושאלו איך עבר היום.' },
+  { id:'ce2', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'ויכוח על הילדים התחיל לידם, ו{ש} [הרגיש שלא מגבים אותו|הרגישה שלא מגבים אותה].', self:'ויכוח על הילדים התחיל לידם, [והרגשת שלא מגבים אותך|והרגשת שלא מגבים אותך].' },
+  { id:'ce3', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'בן או בת הזוג אמרו מול הילדים כמה הם [מעריכים את {ש}|מעריכים את {ש}].', self:'בן או בת הזוג אמרו מול הילדים כמה הם מעריכים אותך.' },
+  { id:'ce4', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'{ש} [ביקש|ביקשה] ערב זוגי, והתוכנית התבטלה בגלל סידורים של הילדים.', self:'ביקשת ערב זוגי, והתוכנית התבטלה בגלל סידורים של הילדים.' }
+];
+
+// חידות ל"משימה משותפת": כל טלפון מקבל רק חלק מהרמזים
+window.PUZZLES = [
+  { id:'z1',  answers:['ירח'],   clues:['אני מופיע בעיקר בלילה','כל כמה ימים אני משנה צורה','אני לא כוכב, למרות שאני בשמיים','יש לי צד שאף פעם לא רואים מכדור הארץ'] },
+  { id:'z2',  answers:['מטריה','מטרייה'], clues:['פותחים אותי כשמים יורדים מלמעלה','יש לי ידית','אני מתקפלת','הרבה פעמים שוכחים אותי באוטובוס'] },
+  { id:'z3',  answers:['שעון'],  clues:['יש לי פנים אבל אין לי עיניים','יש לי ידיים, אבל אני לא מוחא כפיים','אני סופר כל הזמן ולא מתעייף','בבוקר מעירים בעזרתי'] },
+  { id:'z4',  answers:['צל'],    clues:['אני הולך איתך לכל מקום','בחושך אני נעלם','בצהריים אני הכי קצר','אי אפשר לגעת בי'] },
+  { id:'z5',  answers:['מפתח'],  clues:['אני קטן ונכנס לחור','בלעדיי לא נכנסים הביתה','יש לי שיניים אבל אני לא אוכל','לרוב אני תלוי בצרור עם חברים'] },
+  { id:'z6',  answers:['חלום'],  clues:['אני מגיע רק כשישנים','לפעמים אני מפחיד ולפעמים מצחיק','בבוקר קשה לזכור אותי','יש כאלה שמספרים עליי בארוחת הבוקר'] },
+  { id:'z7',  answers:['אבטיח'], clues:['אני ירוק מבחוץ','אני אדום מבפנים','יש בי הרבה גרעינים שחורים','אוכלים אותי בקיץ, לפעמים עם בולגרית'] },
+  { id:'z8',  answers:['חיבוק'], clues:['אני לא עולה כסף','צריך לפחות שניים בשבילי','אני עוזר כשעצוב','נותנים אותי עם הידיים'] },
+  { id:'z9',  answers:['סוד'],   clues:['אם מספרים אותי, אני כבר לא אני','שומרים עליי','לפעמים לוחשים אותי באוזן','חברים טובים יודעים לשמור עליי'] },
+  { id:'z10', answers:['מראה'],  clues:['אני מראה לך את עצמך','אני עשויה מזכוכית','כשאתה מרים יד ימין, אני מרימה שמאל','מצחצחים שיניים מולי'] },
+  { id:'z11', answers:['קשת','קשת בענן'], clues:['אני מופיעה אחרי גשם','יש בי שבעה צבעים','אני בצורת חצי עיגול','צריך שמש כדי שאופיע'] },
+  { id:'z12', answers:['כרית'],  clues:['אני רכה','מניחים עליי את הראש','לפעמים נלחמים בעזרתי','אני גרה על המיטה'] }
+];
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+/* רגע משפחתי – משחק משפחתי משותף מכמה טלפונים */
+(function () {
+'use strict';
+
+// ================= עזרים =================
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const rid = () => Math.random().toString(36).slice(2, 10);
+// [זכר|נקבה] ו-{ש}
+function g(text, gender, name) {
+  return String(text || '')
+    .replace(/\[([^|\]]*)\|([^\]]*)\]/g, (_, m, f) => gender === 'f' ? f : m)
+    .replace(/\{ש\}/g, name || '');
+}
+function setPath(obj, path, val) {
+  const parts = path.split('.');
+  let o = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (typeof o[parts[i]] !== 'object' || o[parts[i]] === null) o[parts[i]] = {};
+    o = o[parts[i]];
+  }
+  o[parts[parts.length - 1]] = val;
+}
+function norm(s) {
+  return String(s || '').replace(/[֑-ׇ]/g, '').replace(/[^א-תa-zA-Z0-9]/g, '').replace(/^ה(?=..)/, '').replace(/ך/g, 'כ').replace(/ם/g, 'מ').replace(/ן/g, 'נ').replace(/ף/g, 'פ').replace(/ץ/g, 'צ').replace(/יי/g, 'י');
+}
+function askConfirm(msg) {
+  return new Promise(res => {
+    const d = document.createElement('div');
+    d.style.cssText = 'position:fixed;inset:0;background:rgba(62,59,79,.35);display:flex;align-items:center;justify-content:center;z-index:20;padding:20px';
+    d.innerHTML = `<div class="card" style="max-width:360px;width:100%"><p class="big">${esc(msg)}</p><div class="row"><button class="btn" data-y>כן</button><button class="btn sec" data-n>ביטול</button></div></div>`;
+    document.body.appendChild(d);
+    d.querySelector('[data-y]').onclick = () => { d.remove(); res(true); };
+    d.querySelector('[data-n]').onclick = () => { d.remove(); res(false); };
+  });
+}
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.style.display = 'none', 2600);
+}
+
+const FEELINGS = [
+  ['😊', 'שמח', 'שמחה'], ['🥹', 'נרגש', 'נרגשת'], ['😌', 'רגוע', 'רגועה'],
+  ['🤗', 'אהוב', 'אהובה'], ['😮', 'מופתע', 'מופתעת'], ['😳', 'נבוך', 'נבוכה'],
+  ['😔', 'עצוב', 'עצובה'], ['😤', 'כועס', 'כועסת'], ['😣', 'מתוסכל', 'מתוסכלת'],
+  ['😟', 'לחוץ', 'לחוצה'], ['🥺', 'בודד', 'בודדה'], ['😞', 'מאוכזב', 'מאוכזבת']
+];
+const MODES = { f: 'כל המשפחה', s: 'אחים', p: 'הורים' };
+const TYPE_LABEL = { open: 'שיחה פתוחה', guess: 'מפת הלב', empathy: 'בנעליים של', puzzle: 'משימה משותפת' };
+const TYPE_HINT = {
+  open: 'כל אחד עונה בטלפון שלו. התשובות ייחשפו יחד.',
+  guess: 'מנחשים מה התשובה, ואז שומעים את התשובה האמיתית.',
+  empathy: 'מנסים להרגיש מה מישהו אחר מרגיש.',
+  puzzle: 'לכל אחד יש רק חלק מהרמזים. רק יחד פותרים!'
+};
+const SEQ = ['open', 'guess', 'empathy', 'open', 'guess', 'empathy', 'open', 'guess', 'open', 'empathy', 'guess', 'open']; // בלי חידות כלליות
+
+// ================= שכבת אחסון =================
+const cfg = window.FIREBASE_CONFIG || {};
+const DEMO = !cfg.apiKey || /PASTE/.test(cfg.apiKey) || typeof firebase === 'undefined' || /[?&]demo/.test(location.search);
+
+const LS = (() => {
+  try { const k = '__t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return localStorage; }
+  catch (e) { const m = {}; return { getItem: k => (k in m ? m[k] : null), setItem: (k, v) => { m[k] = String(v); }, removeItem: k => { delete m[k]; } }; }
+})();
+function makeLocalStore() {
+  const bc = ('BroadcastChannel' in window) ? new BroadcastChannel('fg') : null;
+  const subs = {};
+  const key = c => 'fg_room_' + c;
+  const read = c => { try { return JSON.parse(LS.getItem(key(c))); } catch (e) { return null; } };
+  const notify = c => { (subs[c] || []).forEach(fn => fn(read(c))); };
+  if (bc) bc.onmessage = e => notify(e.data);
+  window.addEventListener('storage', e => { if (e.key && e.key.startsWith('fg_room_')) notify(e.key.slice(8)); });
+  const write = (c, v) => { if (v === null) LS.removeItem(key(c)); else LS.setItem(key(c), JSON.stringify(v)); bc && bc.postMessage(c); setTimeout(() => notify(c), 0); };
+  return {
+    async createRoom(c, data) { const ex = read(c); if (ex && Date.now() - ex.createdAt < 12 * 3600e3) throw new Error('exists'); write(c, data); },
+    async getRoom(c) { return read(c); },
+    async update(c, patch) { const r = read(c); if (!r) throw new Error('missing'); Object.keys(patch).forEach(k => setPath(r, k, patch[k])); write(c, r); },
+    subscribe(c, fn) { (subs[c] = subs[c] || []).push(fn); setTimeout(() => fn(read(c)), 0); return () => { subs[c] = (subs[c] || []).filter(f => f !== fn); }; },
+    async deleteRoom(c) { write(c, null); },
+    async loadQuestions() { try { return JSON.parse(LS.getItem('fg_questions')) || []; } catch (e) { return []; } },
+    async saveQuestion(q) { const a = await this.loadQuestions(); const i = a.findIndex(x => x.id === q.id); if (i >= 0) a[i] = q; else a.push(q); LS.setItem('fg_questions', JSON.stringify(a)); },
+    async deleteQuestion(id) { const a = (await this.loadQuestions()).filter(x => x.id !== id); LS.setItem('fg_questions', JSON.stringify(a)); },
+    async seed(list) { LS.setItem('fg_questions', JSON.stringify(list)); },
+    async saveSummary(s) { const a = await this.loadSummaries(); a.push(s); LS.setItem('fg_summaries', JSON.stringify(a)); },
+    async loadSummaries() { try { return JSON.parse(LS.getItem('fg_summaries')) || []; } catch (e) { return []; } },
+    async deleteSummary(id) { const a = (await this.loadSummaries()).filter(x => x.id !== id); LS.setItem('fg_summaries', JSON.stringify(a)); },
+    onAuth(fn) { fn({ email: 'demo' }); }, async signIn() {}, async signOut() {}
+  };
+}
+
+function makeFirebaseStore() {
+  firebase.initializeApp(cfg);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+  const rooms = db.collection('rooms');
+  const qs = db.collection('questions');
+  return {
+    async createRoom(c, data) {
+      const ref = rooms.doc(c);
+      await db.runTransaction(async tx => {
+        const s = await tx.get(ref);
+        if (s.exists && Date.now() - (s.data().createdAt || 0) < 12 * 3600e3) throw new Error('exists');
+        tx.set(ref, data);
+      });
+    },
+    async getRoom(c) { const s = await rooms.doc(c).get(); return s.exists ? s.data() : null; },
+    async update(c, patch) { await rooms.doc(c).update(patch); },
+    subscribe(c, fn) { return rooms.doc(c).onSnapshot(s => fn(s.exists ? s.data() : null), () => fn(null)); },
+    async deleteRoom(c) { await rooms.doc(c).delete(); },
+    async loadQuestions() { const s = await qs.get(); return s.docs.map(d => d.data()); },
+    async saveQuestion(q) { await qs.doc(q.id).set(q); },
+    async deleteQuestion(id) { await qs.doc(id).delete(); },
+    async saveSummary(s) { await db.collection('summaries').doc(s.id).set(s); },
+    async loadSummaries() { const s = await db.collection('summaries').orderBy('createdAt', 'desc').limit(200).get(); return s.docs.map(d => d.data()); },
+    async deleteSummary(id) { await db.collection('summaries').doc(id).delete(); },
+    async seed(list) { for (let i = 0; i < list.length; i += 400) { const b = db.batch(); list.slice(i, i + 400).forEach(q => b.set(qs.doc(q.id), q)); await b.commit(); } },
+    onAuth(fn) { auth.onAuthStateChanged(fn); },
+    async signIn(email, pw) { await auth.signInWithEmailAndPassword(email, pw); },
+    async signOut() { await auth.signOut(); }
+  };
+}
+
+const store = DEMO ? makeLocalStore() : makeFirebaseStore();
+
+// ================= מצב מקומי =================
+const S = {
+  me: null, code: null, room: null, unsub: null, key: '',
+  hostSel: { mode: 'f', cats: null, len: 18, family: '' },
+  pick: [], lastRoom: null, view: 'home', joinMode: 'create'
+};
+function saveSession() { const v = JSON.stringify({ me: S.me, code: S.code, t: Date.now() }); try { sessionStorage.setItem('fg_me', v); } catch (e) {} LS.setItem('fg_me', v); }
+function clearSession() { try { sessionStorage.removeItem('fg_me'); } catch (e) {} LS.removeItem('fg_me'); }
+function loadProfile() { try { return JSON.parse(LS.getItem('fg_profile')) || {}; } catch (e) { return {}; } }
+
+const app = $('#app');
+const demoBar = () => DEMO ? '<div class="demo">מצב הדגמה: המשחק פועל רק במכשיר הזה (אפשר לפתוח כמה לשוניות כדי לנסות). אחרי החיבור ל-Firebase כל אחד יצטרף מהטלפון שלו.</div>' : '';
+const isHost = () => S.room && S.me && S.room.hostId === S.me.id;
+const players = r => Object.entries((r && r.players) || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => a.joinedAt - b.joinedAt);
+const P = id => (S.room && S.room.players && S.room.players[id]) || { name: '?', gender: 'm' };
+const gw = (p, m, f) => (p && p.gender === 'f') ? f : m;
+const canAnswer = (it, p) => !(it && it.type === 'open' && it.q && it.q.who) || (p && p.role === it.q.who);
+const WHO_LABEL = { parent: 'ההורים', child: 'הילדים' };
+const selCats = () => S.hostSel.cats || Object.keys(window.TOPICS).filter(k => window.TOPICS[k].general);
+function catsLabel(cats) {
+  if (!cats || !cats.length) return '';
+  const gen = Object.keys(window.TOPICS).filter(k => window.TOPICS[k].general);
+  if (cats.length === gen.length && gen.every(k => cats.includes(k))) return 'המאגר הכללי';
+  return cats.map(k => (window.TOPICS[k] || {}).name).filter(Boolean).join(', ');
+}
+const curAns = r => { const o = {}; Object.entries(r.answers || {}).forEach(([k, v]) => { if (v && v.r === r.idx) o[k] = v; }); return o; };
+
+// ================= מסכי פתיחה =================
+function renderHome() {
+  S.view = 'home';
+  app.innerHTML = `${demoBar()}
+  <div class="hero"><div class="logo">🫶</div><h1>${esc(window.GAME_NAME || 'רגע משפחתי')}</h1>
+  <p class="muted">משחק של היכרות, צחוק וקרבה. כל אחד משחק מהטלפון שלו, וכולם יחד קבוצה אחת.</p></div>
+  <button class="btn" id="bCreate">פתיחת משחק חדש</button>
+  <button class="btn sec" id="bJoin">הצטרפות למשחק</button>
+  <div class="card"><h3>איך זה עובד?</h3>
+  <p>אחד מבני המשפחה פותח משחק ומקבל קוד. כל השאר נכנסים לאותו קישור בטלפון שלהם ומקלידים את הקוד.</p>
+  <p>אין כאן מנצחים ומפסידים: כל תשובה מוסיפה נקודות לקופה המשפחתית. אפשר תמיד לדלג על שאלה.</p></div>
+  <div class="card"><h3>ההסכם שלנו במשחק 🤝</h3>
+  <p>מדברים בכבוד, בלי ציניות ובלי לעג.<br>מקשיבים עד הסוף, בלי להפריע.<br>כל תשובה בסדר, ואין תשובה "לא נכונה".<br>מה שנאמר במשחק לא משמש נגד אף אחד אחר כך.</p></div>
+  <button class="btn coral" id="bTry">ניסיון לבד, עם משפחה מדומה</button>
+  <button class="btn ghost" id="bAdmin">כניסת מנחה</button>`;
+  $('#bTry').onclick = () => renderProfile('trial');
+  $('#bCreate').onclick = () => renderProfile('create');
+  $('#bJoin').onclick = () => renderProfile('join');
+  $('#bAdmin').onclick = () => { location.hash = 'admin'; };
+}
+
+function renderProfile(mode) {
+  S.view = 'profile'; S.joinMode = mode;
+  const prof = loadProfile();
+  const sel = { gender: prof.gender || '', role: prof.role || '' };
+  app.innerHTML = `${demoBar()}
+  <h2>${mode === 'create' ? 'פתיחת משחק' : mode === 'trial' ? 'ניסיון לבד' : 'הצטרפות למשחק'}</h2>
+  ${mode === 'trial' ? '<div class="help">משחקים עם בני משפחה מדומים שעונים לבד אחרי כמה שניות. במשחק הורים מצטרף בן או בת זוג מדומים, במשחק אחים שני אחים, ובמשחק משפחה שלושתם. את המצב בוחרים בחדר ההמתנה. סיכום של משחק ניסיון לא נשמר במסך המנחה.</div>' : ''}
+  ${mode === 'join' ? `<label>קוד המשחק</label><input type="text" id="code" inputmode="numeric" maxlength="4" placeholder="4 ספרות" style="font-size:26px;letter-spacing:6px;text-align:center;direction:ltr">` : ''}
+  <label>השם שלך</label><input type="text" id="name" maxlength="20" placeholder="איך קוראים לך?" value="${esc(prof.name || '')}">
+  <label>איך לפנות אלייך?</label>
+  <div class="choice" id="gender"><button data-v="m">בלשון זכר</button><button data-v="f">בלשון נקבה</button></div>
+  <label>אני במשפחה</label>
+  <div class="choice" id="role"><button data-v="parent">הורה</button><button data-v="child">ילד או ילדה</button></div>
+  <button class="btn" id="go" style="margin-top:22px">${mode === 'join' ? 'הצטרפות' : 'פתיחה'}</button>
+  <button class="btn ghost" id="back">חזרה</button>`;
+  const bindChoice = (id, k) => $('#' + id).querySelectorAll('button').forEach(b => b.onclick = () => {
+    sel[k] = b.dataset.v; $('#' + id).querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  });
+  bindChoice('gender', 'gender'); bindChoice('role', 'role');
+  ['gender', 'role'].forEach(k => { const b = $('#' + k + ' button[data-v="' + sel[k] + '"]'); if (b) b.classList.add('on'); });
+  $('#back').onclick = renderHome;
+  $('#go').onclick = async () => {
+    const name = $('#name').value.trim();
+    if (!name) return toast('צריך לכתוב שם');
+    if (!sel.gender) return toast('בחרו לשון פנייה');
+    if (!sel.role) return toast('בחרו אם אתם הורה או ילד');
+    const btn = $('#go'); btn.disabled = true;
+    const me = { id: rid(), name, gender: sel.gender, role: sel.role };
+    LS.setItem('fg_profile', JSON.stringify({ name, gender: sel.gender, role: sel.role }));
+    try {
+      if (mode === 'create' || mode === 'trial') {
+        let code, ok = false;
+        for (let i = 0; i < 8 && !ok; i++) {
+          code = String(1000 + Math.floor(Math.random() * 9000));
+          try {
+            const pl = { [me.id]: { name, gender: sel.gender, role: sel.role, joinedAt: Date.now() } };
+            if (mode === 'trial') Object.assign(pl, botPlayers(S.hostSel.mode, me));
+            await store.createRoom(code, { code, createdAt: Date.now(), hostId: me.id, status: 'lobby', trial: mode === 'trial', players: pl });
+            ok = true;
+          } catch (e) { if (e.message !== 'exists') throw e; }
+        }
+        if (!ok) throw new Error('nocode');
+        S.me = me; S.code = code;
+      } else {
+        const code = ($('#code').value || '').trim();
+        if (!/^\d{4}$/.test(code)) { btn.disabled = false; return toast('הקוד הוא 4 ספרות'); }
+        const r = await store.getRoom(code);
+        if (!r) { btn.disabled = false; return toast('לא מצאנו משחק עם הקוד הזה'); }
+        if (r.status !== 'lobby') { btn.disabled = false; return toast('המשחק הזה כבר התחיל'); }
+        if (Object.keys(r.players || {}).length >= 8) { btn.disabled = false; return toast('המשחק מלא (עד 8 משתתפים)'); }
+        await store.update(code, { ['players.' + me.id]: { name, gender: sel.gender, role: sel.role, joinedAt: Date.now() } });
+        S.me = me; S.code = code;
+      }
+      saveSession(); connect();
+    } catch (e) { console.error(e); btn.disabled = false; toast('משהו השתבש, נסו שוב'); }
+  };
+}
+
+function connect() {
+  if (S.unsub) S.unsub();
+  S.key = '';
+  S.unsub = store.subscribe(S.code, r => {
+    if (!r) {
+      if (S.lastRoom && S.lastRoom.status === 'ended') return; // הכרטיס הסופי נשאר על המסך
+      if (S.view === 'game') toast('המשחק נסגר');
+      leave();
+      return;
+    }
+    if (!r.players || !r.players[S.me.id]) { toast('יצאת מהמשחק'); leave(); return; }
+    S.room = r; S.lastRoom = r; S.view = 'game';
+    renderGame();
+  });
+}
+function leave() { if (S.unsub) S.unsub(); S.unsub = null; S.room = null; S.code = null; S.me = null; S.lastRoom = null; clearSession(); renderHome(); }
+
+// ================= ניהול המשחק (טלפון המארח) =================
+async function buildPlan(r) {
+  const mode = S.hostSel.mode, cats = selCats(), len = S.hostSel.len;
+  let bank = [];
+  try { bank = await store.loadQuestions(); } catch (e) { bank = []; }
+  if (!bank.length) bank = window.DEFAULT_QUESTIONS;
+  bank = bank.filter(q => q && !q.hidden && (q.modes || '').includes(mode));
+  const isGen = q => window.TOPICS[q.topic] && window.TOPICS[q.topic].general;
+  const pool = t => {
+    // שוזרים את הנושאים לסירוגין, כדי שכל נושא שנבחר יופיע במשחק
+    const groups = shuffle(cats).map(c => shuffle(bank.filter(q => q.t === t && q.topic === c))).filter(g => g.length);
+    const pri = [];
+    for (let i = 0; groups.some(g => g[i]); i++) groups.forEach(g => { if (g[i]) pri.push(g[i]); });
+    const fb = shuffle(bank.filter(q => q.t === t && isGen(q) && !pri.includes(q)));
+    return pri.concat(fb);
+  };
+  const pools = { open: pool('open'), guess: pool('guess'), empathy: pool('empathy') };
+  const used = new Set();
+  const ps = shuffle(players(r));
+  let ptr = 0;
+  const puzzles = shuffle(window.PUZZLES);
+  const plan = [];
+  for (let i = 0; i < len; i++) {
+    let t = SEQ[i % SEQ.length];
+    let item = null;
+    if (t === 'guess' || t === 'empathy') {
+      for (let k = 0; k < ps.length && !item; k++) {
+        const subj = ps[(ptr + k) % ps.length];
+        const q = pools[t].find(q => !used.has(q.id) && (q.about === 'any' || !q.about || q.about === subj.role));
+        if (q) { item = { type: t, q, subjectId: subj.id }; used.add(q.id); ptr = (ptr + k + 1) % ps.length; }
+      }
+      if (!item) t = 'open';
+    }
+    if (t === 'puzzle') {
+      const z = puzzles.pop();
+      if (z) {
+        const clues = {}; ps.forEach(p => clues[p.id] = []);
+        z.clues.forEach((c, j) => clues[ps[j % ps.length].id].push(c));
+        item = { type: 'puzzle', z, clues };
+      } else t = 'open';
+    }
+    if (t === 'open') {
+      const q = pools.open.find(q => !used.has(q.id) && (!q.who || ps.some(p => p.role === q.who)));
+      if (q) { used.add(q.id); item = { type: 'open', q }; }
+    }
+    if (item) plan.push(item);
+  }
+  return plan;
+}
+
+async function startGame() {
+  const r = S.room;
+  if (players(r).length < 2) return toast('צריך לפחות שני משתתפים');
+  const plan = await buildPlan(r);
+  if (!plan.length) return toast('לא נמצאו שאלות למצב הזה');
+  await store.update(S.code, { status: 'playing', family: (S.hostSel.family || '').trim(), log: {}, mode: S.hostSel.mode, cats: selCats(), plan, idx: 0, phase: 'answer', answers: {}, marks: {}, hearts: {}, solved: null, score: 0 });
+}
+
+function roundPoints(r) {
+  const it = r.plan[r.idx]; const a = curAns(r);
+  if (it.type === 'open') return Object.values(a).filter(x => !x.skip).length;
+  if (it.type === 'guess') return Object.values(r.marks || {}).filter(v => v === r.idx).length;
+  if (it.type === 'empathy') {
+    const real = (a[it.subjectId] && a[it.subjectId].v && a[it.subjectId].v.f) || [];
+    let pts = 0;
+    Object.entries(a).forEach(([pid, x]) => { if (pid !== it.subjectId && x.v && (x.v.f || []).some(f => real.includes(f))) pts++; });
+    pts += Object.values(r.hearts || {}).filter(v => v === r.idx).length;
+    return pts;
+  }
+  if (it.type === 'puzzle') return (r.solved && r.solved.r === r.idx) ? 3 : 0;
+  return 0;
+}
+
+async function nextRound(skip) {
+  const r = S.room;
+  const add = skip ? 0 : roundPoints(r);
+  const score = (r.score || 0) + add;
+  const it = r.plan[r.idx];
+  const rec = { i: r.idx, type: it.type, skipped: !!skip, answers: curAns(r), marks: r.marks || {}, hearts: r.hearts || {}, solved: !!(r.solved && r.solved.r === r.idx) };
+  if (it.q) rec.q = it.q; if (it.subjectId) rec.subjectId = it.subjectId; if (it.z) rec.z = { answers: it.z.answers };
+  const logKey = 'log.r' + r.idx;
+  if (r.idx + 1 < r.plan.length) {
+    await store.update(S.code, { [logKey]: rec, idx: r.idx + 1, phase: 'answer', answers: {}, marks: {}, hearts: {}, solved: null, score });
+  } else {
+    await store.update(S.code, { [logKey]: rec, status: 'thanks', phase: 'write', thanks: {}, answers: {}, score });
+  }
+  window.scrollTo(0, 0);
+}
+
+
+// ================= משפחה מדומה (מצב ניסיון) =================
+const BOT_POOL = {
+  avi: { id: 'bot_avi', name: 'אבי', gender: 'm', role: 'parent' },
+  michal: { id: 'bot_michal', name: 'מיכל', gender: 'f', role: 'parent' },
+  yoav: { id: 'bot_yoav', name: 'יואב', gender: 'm', role: 'child' },
+  noa: { id: 'bot_noa', name: 'נועה', gender: 'f', role: 'child' }
+};
+// בני המשפחה המדומים לפי מצב המשחק: הורים = בן או בת זוג, אחים = שני אחים, משפחה = בן זוג ושני ילדים
+function botsFor(mode, me) {
+  const partner = me && me.gender === 'm' ? BOT_POOL.michal : BOT_POOL.avi;
+  if (mode === 'p') return [partner];
+  if (mode === 's') return [BOT_POOL.yoav, BOT_POOL.noa];
+  return [partner, BOT_POOL.yoav, BOT_POOL.noa];
+}
+function botPlayers(mode, me) { const o = {}; botsFor(mode, me).forEach((b, i) => { o[b.id] = { name: b.name, gender: b.gender, role: b.role, joinedAt: Date.now() + i + 1, bot: true }; }); return o; }
+async function syncBots(mode) {
+  const humans = {}; Object.entries(S.room.players || {}).forEach(([id, p]) => { if (!p.bot) humans[id] = p; });
+  await store.update(S.code, { trial: true, players: Object.assign(humans, botPlayers(mode, S.me)) });
+}
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const BOT_OPEN = ['ערב משחקים בסלון עם פופקורן', 'כשכולנו צוחקים יחד בארוחת שישי', 'טיול בים בשקיעה', 'שמישהו פשוט ישאל מה שלומי', 'פיצה ביתית שמכינים יחד', 'נסיעה משפחתית לצפון', 'כשסבתא מספרת סיפורים', 'לשבת יחד בלי טלפונים'];
+const BOT_GUESS = ['פסטה', 'לישון עד מאוחר', 'קצת זמן לבד עם מוזיקה', 'חיבוק', 'שוקולד', 'טיול בטבע', 'יפן', 'כדורגל', 'לצייר'];
+const BOT_HELP = ['לשאול מה קרה ולהקשיב', 'חיבוק', 'להכין משהו טעים', 'לתת קצת זמן ואז לבוא לדבר', 'להגיד שזה בסדר להרגיש ככה'];
+const BOT_THANKS = ['היה כיף לשחק איתך הערב 💛', 'תודה על החיוך שלך', 'אוהבים אותך מאוד', 'תודה שתמיד אפשר לדבר איתך', 'צחקתי איתך הערב המון'];
+const botDone = new Set();
+function botTick(r) {
+  const bots = players(r).filter(p => p.bot);
+  const later = (key, ms, fn) => { if (botDone.has(key)) return; botDone.add(key); setTimeout(() => { if (S.room && S.code) fn().catch(e => console.error(e)); }, ms); };
+  bots.forEach((b, i) => {
+    const ms = 1200 + i * 900 + Math.random() * 800;
+    if (r.status === 'playing') {
+      const it = r.plan[r.idx]; const k = r.idx + '|' + b.id;
+      if (r.phase === 'answer' && it.type !== 'puzzle' && canAnswer(it, b)) {
+        let v;
+        if (it.type === 'open') v = pick(BOT_OPEN);
+        else if (it.type === 'guess') v = pick(BOT_GUESS);
+        else v = { f: shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]).slice(0, 1 + (Math.random() < .5 ? 1 : 0)), h: Math.random() < .7 ? pick(BOT_HELP) : '' };
+        later('a|' + k, ms, () => store.update(S.code, { ['answers.' + b.id]: { r: r.idx, v, skip: false } }));
+      }
+      if (r.phase === 'reveal' && it.subjectId === b.id) {
+        const a = curAns(r);
+        later('m|' + k, ms + 600, async () => {
+          const patch = {};
+          Object.entries(a).forEach(([pid, x]) => {
+            if (pid === b.id || !x || x.skip || Math.random() < .35) return;
+            if (it.type === 'guess') patch['marks.' + pid] = r.idx;
+            if (it.type === 'empathy' && x.v && x.v.h) patch['hearts.' + pid] = r.idx;
+          });
+          if (Object.keys(patch).length) await store.update(S.code, patch);
+        });
+      }
+    }
+    if (r.status === 'thanks' && r.phase === 'write') {
+      const out = {}; players(r).filter(p => p.id !== b.id).forEach(p => { out[p.id] = pick(BOT_THANKS); });
+      later('t|' + b.id, ms, () => store.update(S.code, { ['thanks.' + b.id]: out }));
+    }
+    if (r.status === 'closing' && r.phase === 'write') {
+      later('c|' + b.id, ms, () => store.update(S.code, { ['closing.' + b.id]: { a: pick(['החידה שפתרנו יחד', 'לשמוע מה מרגיע כל אחד', 'הפתקים בסוף']), b: pick(['ארוחת ערב בלי טלפונים', 'הליכה משותפת בערב', 'לבשל יחד']), c: pick(['ערב סרט משפחתי', 'פיקניק בפארק', 'טיול לחוף']) } }));
+    }
+  });
+}
+
+// ================= ציור מסך המשחק =================
+function viewKey(r) {
+  const a = r.status === 'playing' ? curAns(r) : {};
+  const mine = r.status === 'playing' ? !!a[S.me.id] : r.status === 'thanks' ? !!(r.thanks || {})[S.me.id] : r.status === 'closing' ? !!(r.closing || {})[S.me.id] : false;
+  const base = [r.status, r.idx, r.phase, mine, r.solved ? 1 : 0].join('|');
+  if (r.status === 'lobby') return base + JSON.stringify(r.players) + JSON.stringify(S.hostSel);
+  if (r.phase === 'reveal' || r.phase === 'read' || r.phase === 'card' || r.status === 'ended') return base + JSON.stringify([r.marks, r.hearts, r.answers, r.score, r.closing]);
+  return base;
+}
+
+function renderGame() {
+  const r = S.room;
+  if (r.trial && isHost()) botTick(r);
+  const k = viewKey(r);
+  if (k === S.key) { updateWaiting(); return; }
+  const scrollKeep = (S.key.split('|')[0] === k.split('|')[0] && S.key.split('|')[1] === k.split('|')[1] && S.key.split('|')[2] === k.split('|')[2]);
+  const y = window.scrollY;
+  S.key = k;
+  if (r.status === 'lobby') renderLobby(r);
+  else if (r.status === 'playing') renderRound(r);
+  else if (r.status === 'thanks') renderThanks(r);
+  else if (r.status === 'closing') renderClosing(r);
+  else if (r.status === 'ended') renderEnded(r);
+  if (scrollKeep) window.scrollTo(0, y);
+  updateWaiting();
+}
+
+function header(r) {
+  const n = r.plan ? r.plan.length : 0;
+  const label = r.status === 'playing' ? `סבב ${r.idx + 1} מתוך ${n}` : r.status === 'thanks' ? 'פתקי תודה' : 'סיכום';
+  return `<div class="top"><span>${label}</span><span class="score">❤️ ${r.score || 0}</span></div>`;
+}
+
+function renderLobby(r) {
+  const ps = players(r);
+  const host = isHost();
+  const cs = selCats();
+  const chipGroup = gen => `<div class="choice" style="margin-bottom:6px">${Object.entries(window.TOPICS).filter(([, t]) => !!t.general === gen).map(([k, t]) => `<button data-c="${k}" class="${cs.includes(k) ? 'on' : ''}">${esc(t.name)}</button>`).join('')}</div>`;
+  app.innerHTML = `${demoBar()}
+  <div class="card center"><div class="muted">קוד המשחק</div><div class="code">${esc(r.code)}</div>
+  <div class="muted">כל אחד נכנס לקישור בטלפון שלו, לוחץ "הצטרפות" ומקליד את הקוד</div></div>
+  <div class="card"><h3>מי כבר כאן (${ps.length})</h3>
+  ${ps.map(p => `<span class="chip ${p.id === S.me.id ? 'me' : ''}">${esc(p.name)}${p.id === r.hostId ? ' ⭐' : ''}</span>`).join('')}
+  ${host && ps.length < 2 ? `<p class="muted" style="margin-top:10px">מחכים שעוד מישהו יצטרף. רוצים לנסות לבד?</p><button class="btn coral" id="addBots">ניסיון עם משפחה מדומה</button><div class="muted">בוחרים קודם למטה את מצב המשחק (הורים, אחים או משפחה), והמשפחה המדומה תתאים את עצמה.</div>` : ''}</div>
+  <div class="card" style="background:var(--coral-l);border-color:#F4C2B5"><b>🤝 ההסכם שלנו:</b> מדברים בכבוד, בלי ציניות ובלי לעג. מקשיבים עד הסוף. כל תשובה בסדר, ומה שנאמר במשחק לא משמש נגד אף אחד אחר כך.</div>
+  <div class="help">📝 בסוף המשחק כל אחד יקבל סיכום אישי בכתב, וסיכום כללי של המשחק יישלח למנחה לקראת הפגישה. פתקי התודה מגיעים למנחה בלי שם הכותב. על כל שאלה אפשר לדלג.</div>
+  ${host ? `<div class="card"><h3>הגדרות המשחק</h3>
+    <label>שם המשפחה (כך הסיכום יגיע למנחה)</label><input type="text" id="fam" maxlength="30" placeholder="למשל: משפחת כהן">
+    <label>מי משחק?</label>
+    <div class="choice" id="mode">${Object.entries(MODES).map(([k, v]) => `<button data-v="${k}" class="${S.hostSel.mode === k ? 'on' : ''}">${v}</button>`).join('')}</div>
+    <label>נושאים (אפשר לבחור כמה)</label>
+    <div class="muted" style="margin-bottom:4px">המאגר הכללי</div>${chipGroup(true)}
+    <div class="muted" style="margin-bottom:4px">נושאים מיוחדים</div>${chipGroup(false)}
+    <label>אורך המשחק</label>
+    <div class="choice" id="len">${[[12, 'קצר, כ-25 דק׳'], [18, 'רגיל, כ-40 דק׳'], [24, 'ארוך, כ-55 דק׳']].map(([v, l]) => `<button data-v="${v}" class="${S.hostSel.len === v ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <button class="btn coral" id="start" ${ps.length < 2 ? 'disabled' : ''}>מתחילים!</button>
+    ${ps.length < 2 ? '<div class="muted center">מחכים שעוד מישהו יצטרף…</div>' : ''}
+  </div>` : `<div class="card center"><p class="big">מחכים ש${esc(P(r.hostId).name)} ${P(r.hostId).gender === 'f' ? 'תתחיל' : 'יתחיל'} את המשחק</p><p class="muted">בינתיים אפשר לשבת יחד במקום נוח 🛋️</p></div>`}
+  <button class="btn ghost" id="leave">יציאה</button>`;
+  if (host) {
+
+    $('#fam').value = S.hostSel.family; $('#fam').oninput = e => { S.hostSel.family = e.target.value; };
+    app.querySelectorAll('[data-c]').forEach(b => b.onclick = () => {
+      const c = selCats().slice(); const i = c.indexOf(b.dataset.c);
+      if (i >= 0) { if (c.length === 1) return toast('צריך לבחור לפחות נושא אחד'); c.splice(i, 1); } else c.push(b.dataset.c);
+      S.hostSel.cats = c; S.key = ''; renderGame();
+    });
+    $('#mode').querySelectorAll('button').forEach(b => b.onclick = async () => { S.hostSel.mode = b.dataset.v; S.key = ''; renderGame(); if (r.trial) { try { await syncBots(b.dataset.v); } catch (e) { console.error(e); } } });
+    $('#len').querySelectorAll('button').forEach(b => b.onclick = () => { S.hostSel.len = +b.dataset.v; S.key = ''; renderGame(); });
+    const ab = $('#addBots'); if (ab) ab.onclick = async () => {
+      ab.disabled = true;
+      try {
+        await syncBots(S.hostSel.mode);
+        const bs = botsFor(S.hostSel.mode, S.me); const n = bs.map(x => x.name);
+        toast((n.length > 1 ? n.slice(0, -1).join(', ') + ' ו' + n[n.length - 1] + ' הצטרפו' : n[0] + (bs[0].gender === 'f' ? ' הצטרפה' : ' הצטרף')) + ' 🙂');
+      } catch (e) { ab.disabled = false; toast('משהו השתבש'); }
+    };
+    $('#start').onclick = async e => { e.target.disabled = true; try { await startGame(); } catch (err) { console.error(err); e.target.disabled = false; toast('משהו השתבש'); } };
+  }
+  $('#leave').onclick = async () => {
+    if (host) { if (!(await confirmLeave())) return; await store.deleteRoom(S.code).catch(() => {}); }
+    else { const p = Object.assign({}, r.players); delete p[S.me.id]; await store.update(S.code, { players: p }).catch(() => {}); }
+    leave();
+  };
+}
+function confirmLeave() { return askConfirm('לצאת? המשחק ייסגר לכולם.'); }
+
+function waitingHtml() { return '<div class="wait" id="waiting"></div>'; }
+function updateWaiting() {
+  const w = $('#waiting'); const r = S.room; if (!w || !r) return;
+  let done = {};
+  if (r.status === 'playing') done = curAns(r);
+  else if (r.status === 'thanks') done = r.thanks || {};
+  else if (r.status === 'closing') done = r.closing || {};
+  const ps = players(r);
+  const it0 = r.status === 'playing' ? r.plan[r.idx] : null;
+  const missing = ps.filter(p => !done[p.id] && (!it0 || canAnswer(it0, p)));
+  if (r.status === 'playing' && r.plan[r.idx].type === 'puzzle') { w.textContent = ''; return; }
+  w.innerHTML = missing.length ? 'מחכים ל: ' + missing.map(p => esc(p.name)).join(', ') : '<b style="color:var(--ok)">כולם ענו ✓</b>';
+  const hb = $('#hostAdvance');
+  if (hb) hb.classList.toggle('coral', !missing.length);
+}
+
+function hostBar(label, fn, extra) {
+  if (!isHost()) return `<p class="muted center">${esc(P(S.room.hostId).name)} ${P(S.room.hostId).gender === 'f' ? 'תעביר' : 'יעביר'} לשלב הבא</p>`;
+  setTimeout(() => {
+    const b = $('#hostAdvance'); if (b) b.onclick = async () => { b.disabled = true; try { await fn(); } catch (e) { console.error(e); b.disabled = false; toast('משהו השתבש'); } };
+    const s = $('#hostSkip'); if (s) s.onclick = async () => { s.disabled = true; await nextRound(true); };
+  }, 0);
+  return `<button class="btn" id="hostAdvance">${label}</button>${extra ? '' : '<button class="btn ghost" id="hostSkip">דילוג על הסבב</button>'}`;
+}
+
+async function submit(v, skip) {
+  try { await store.update(S.code, { ['answers.' + S.me.id]: { r: S.room.idx, v: v || null, skip: !!skip } }); }
+  catch (e) { console.error(e); toast('לא נשלח, נסו שוב'); }
+}
+
+function feelGrid(id, gender, max) {
+  return `<div class="feel" id="${id}" data-max="${max}">${FEELINGS.map((f, i) => `<button data-i="${i}"><span>${f[0]}</span>${gender === 'f' ? f[2] : f[1]}</button>`).join('')}</div>`;
+}
+function bindFeel(id) {
+  const el = $('#' + id); if (!el) return () => [];
+  const max = +el.dataset.max; const on = [];
+  el.querySelectorAll('button').forEach(b => b.onclick = () => {
+    const i = +b.dataset.i; const at = on.indexOf(i);
+    if (at >= 0) on.splice(at, 1); else { if (on.length >= max) on.shift(); on.push(i); }
+    el.querySelectorAll('button').forEach(x => x.classList.toggle('on', on.includes(+x.dataset.i)));
+  });
+  return () => on.slice();
+}
+const feelText = (arr, gender) => (arr || []).map(i => FEELINGS[i] ? FEELINGS[i][0] + ' ' + (gender === 'f' ? FEELINGS[i][2] : FEELINGS[i][1]) : '').join(' · ');
+
+function renderRound(r) {
+  const it = r.plan[r.idx];
+  const me = S.me; const a = curAns(r); const mine = a[me.id];
+  const subj = it.subjectId ? P(it.subjectId) : null;
+  const isSubj = it.subjectId === me.id;
+  let body = '';
+
+  if (it.type === 'open') {
+    const qt = g(it.q.text, me.gender);
+    if (r.phase === 'answer') {
+      body = `<div class="q">${esc(qt)}</div>` + (!canAnswer(it, me) ? `<div class="note">הפעם עונים ${WHO_LABEL[it.q.who]} 👂<br><span class="muted">אחרי החשיפה תשמעו את התשובות ותוכלו לשאול שאלות</span></div>` : mine ? `<div class="note">התשובה נשלחה ✓<br><span class="muted">מחכים שכולם יסיימו, ואז נחשוף יחד</span></div>` :
+        `<textarea id="ans" placeholder="התשובה שלך…"></textarea><button class="btn" id="send">שליחה</button><button class="btn ghost" id="skip">דילוג על השאלה</button>`) +
+        waitingHtml() + hostBar('חשיפת התשובות', () => store.update(S.code, { phase: 'reveal' }));
+    } else {
+      body = `<div class="q">${esc(qt)}</div>` +
+        players(r).filter(p => canAnswer(it, p)).map(p => { const x = a[p.id]; return `<div class="ans"><b>${esc(p.name)}</b>${x ? (x.skip ? `<span class="muted">${gw(p,'דילג','דילגה')} הפעם</span>` : esc(x.v)) : `<span class="muted">${gw(p,'לא ענה','לא ענתה')}</span>`}</div>`; }).join('') +
+        `<p class="muted">רגע לשאול: מה הפתיע אתכם? למי יש שאלת המשך?</p>` + hostBar('לסבב הבא', () => nextRound(false), true);
+    }
+  }
+
+  if (it.type === 'guess') {
+    const qAbout = g(it.q.q, subj.gender, subj.name);
+    if (r.phase === 'answer') {
+      if (isSubj) {
+        body = `<div class="q">${esc(g(it.q.self, me.gender))}</div><p class="muted">כולם מנחשים עכשיו מה ${me.gender === 'f' ? 'תעני' : 'תענה'}. ${me.gender === 'f' ? 'עני' : 'ענה'} בכנות 🙂</p>`;
+      } else {
+        body = `<div class="q">${esc(qAbout)}</div><p class="muted">מה לדעתך ${esc(subj.name)} ${subj.gender === 'f' ? 'תענה' : 'יענה'}?</p>`;
+      }
+      body += mine ? `<div class="note">נשלח ✓</div>` : `<textarea id="ans" placeholder="${isSubj ? 'התשובה שלך…' : 'הניחוש שלך…'}"></textarea><button class="btn" id="send">שליחה</button><button class="btn ghost" id="skip">דילוג</button>`;
+      body += waitingHtml() + hostBar('חשיפה!', () => store.update(S.code, { phase: 'reveal' }));
+    } else {
+      const real = a[it.subjectId];
+      body = `<div class="q">${esc(qAbout)}</div>
+        <div class="ans" style="background:var(--coral-l);border-color:#EDA996"><b>התשובה של ${esc(subj.name)}</b><span class="big">${real ? (real.skip ? gw(subj,'דילג','דילגה') : esc(real.v)) : '—'}</span></div>
+        <h3 style="margin-top:14px">הניחושים</h3>` +
+        players(r).filter(p => p.id !== it.subjectId).map(p => {
+          const x = a[p.id]; const on = (r.marks || {})[p.id] === r.idx;
+          return `<div class="ans"><b>${esc(p.name)}</b>${x ? (x.skip ? `<span class="muted">${gw(p,'דילג','דילגה')}</span>` : esc(x.v)) : `<span class="muted">${gw(p,'לא ניחש','לא ניחשה')}</span>`}
+          ${isSubj && x && !x.skip ? `<div><button class="mark ${on ? 'on' : ''}" data-p="${p.id}">${on ? '❤️ קרוב!' : 'קרוב? סמנו ❤️'}</button></div>` : (on ? `<div class="muted">❤️ ${gw(p,'קלע','קלעה')}</div>` : '')}</div>`;
+        }).join('') +
+        `<p class="muted">${esc(subj.name)}, ${subj.gender === 'f' ? 'סמני' : 'סמן'} ניחושים קרובים, ו${subj.gender === 'f' ? 'ספרי' : 'ספר'} מה הפתיע ${subj.gender === 'f' ? 'אותך' : 'אותך'}.</p>` +
+        hostBar('לסבב הבא', () => nextRound(false), true);
+    }
+  }
+
+  if (it.type === 'empathy') {
+    const scen = g(it.q.q, subj.gender, subj.name);
+    if (r.phase === 'answer') {
+      if (isSubj) {
+        body = `<div class="q">${esc(g(it.q.self, me.gender))}</div><label>איך היית ${me.gender === 'f' ? 'מרגישה' : 'מרגיש'}? (עד 2)</label>${mine ? '' : feelGrid('fg', me.gender, 2)}
+          ${mine ? '' : `<label>מה היה עוזר לך ברגע כזה? (לא חובה)</label><textarea id="help" placeholder="למשל: שמישהו ישאל מה קרה…"></textarea>`}`;
+      } else {
+        body = `<div class="q">${esc(scen)}</div><label>איך ${esc(subj.name)} ${subj.gender === 'f' ? 'מרגישה' : 'מרגיש'}? (עד 2)</label>${mine ? '' : feelGrid('fg', subj.gender, 2)}
+          ${mine ? '' : `<label>מה היית עושה כדי לעזור ל${esc(subj.name)}? (לא חובה)</label><textarea id="help" placeholder="רעיון קטן…"></textarea>`}`;
+      }
+      body += mine ? `<div class="note">נשלח ✓</div>` : `<button class="btn" id="send">שליחה</button><button class="btn ghost" id="skip">דילוג</button>`;
+      body += waitingHtml() + hostBar('חשיפה!', () => store.update(S.code, { phase: 'reveal' }));
+    } else {
+      const real = a[it.subjectId]; const rf = (real && real.v && real.v.f) || [];
+      body = `<div class="q">${esc(scen)}</div>
+        <div class="ans" style="background:var(--teal-l);border-color:#9FD3C9"><b>מה ${esc(subj.name)} ${subj.gender === 'f' ? 'הייתה מרגישה' : 'היה מרגיש'} באמת</b><span class="big">${real && !real.skip ? esc(feelText(rf, subj.gender)) : gw(subj,'דילג','דילגה')}</span>
+        ${real && real.v && real.v.h ? `<div style="margin-top:6px">מה היה עוזר: ${esc(real.v.h)}</div>` : ''}</div>` +
+        players(r).filter(p => p.id !== it.subjectId).map(p => {
+          const x = a[p.id]; if (!x) return `<div class="ans"><b>${esc(p.name)}</b><span class="muted">${gw(p,'לא ענה','לא ענתה')}</span></div>`;
+          if (x.skip) return `<div class="ans"><b>${esc(p.name)}</b><span class="muted">${gw(p,'דילג','דילגה')}</span></div>`;
+          const hit = (x.v.f || []).some(f => rf.includes(f));
+          const hk = p.id; const on = (r.hearts || {})[hk] === r.idx;
+          return `<div class="ans"><b>${esc(p.name)} ${hit ? '· ' + gw(p,'הרגיש נכון','הרגישה נכון') + ' ❤️' : ''}</b>${esc(feelText(x.v.f, subj.gender))}
+            ${x.v.h ? `<div style="margin-top:4px">💡 ${esc(x.v.h)}</div>` : ''}
+            ${isSubj && x.v.h ? `<div><button class="mark ${on ? 'on' : ''}" data-h="${hk}">${on ? '❤️ זה היה עוזר לי' : 'זה היה עוזר לי? ❤️'}</button></div>` : ''}</div>`;
+        }).join('') +
+        `<p class="muted">שאלה לשיחה: מתי זה קרה באמת? מה עזר אז?</p>` + hostBar('לסבב הבא', () => nextRound(false), true);
+    }
+  }
+
+  if (it.type === 'puzzle') {
+    const solved = r.solved && r.solved.r === r.idx;
+    const myClues = (it.clues || {})[me.id] || [];
+    if (r.phase === 'reveal' || solved) {
+      body = solved ? `<div class="celebrate">🎉</div><h2 class="center">פתרתם יחד!</h2><p class="center big">התשובה: ${esc(it.z.answers[0])}</p><p class="center muted">${esc(r.solved.by)} ${r.solved.g === 'f' ? 'הקלידה' : 'הקליד'} את התשובה, אבל כולם תרמו</p>`
+        : `<h2 class="center">התשובה הייתה: ${esc(it.z.answers[0])}</h2><p class="center muted">לא נורא, בפעם הבאה 🙂</p>`;
+      body += hostBar('לסבב הבא', () => nextRound(false), true);
+    } else {
+      body = `<div class="q">מה אני?</div><p class="muted">כל אחד מקריא בקול את הרמזים שלו. רק ביחד אפשר לנחש!</p>
+        <h3>הרמזים שלך</h3>${myClues.length ? myClues.map(c => `<div class="clue">🔎 ${esc(c)}</div>`).join('') : '<div class="clue">אין לך רמז הפעם. התפקיד שלך: לאסוף את הרמזים מכולם ולנחש!</div>'}
+        ${r.trial ? players(r).filter(p => p.bot).map(p => ((it.clues || {})[p.id] || []).map(c => `<div class="clue" style="opacity:.85">🔎 <b>${esc(p.name)}:</b> ${esc(c)}</div>`).join('')).join('') : ''}
+        <label>הניחוש של המשפחה</label><input type="text" id="guess" placeholder="מה התשובה?"><button class="btn coral" id="tryG">בדיקה</button>` +
+        (isHost() ? `<button class="btn ghost" id="giveUp">מוותרים, תראו לנו</button>` : '');
+    }
+  }
+
+  app.innerHTML = `${demoBar()}${header(r)}<div class="card"><span class="badge b-${it.type}">${TYPE_LABEL[it.type]}</span>
+    ${r.phase === 'answer' && it.type !== 'puzzle' ? `<div class="muted" style="margin-top:-4px">${TYPE_HINT[it.type]}</div>` : ''}${body}</div>
+    <button class="btn ghost" id="leave">יציאה מהמשחק</button>`;
+
+  // אירועים
+  const send = $('#send'), skip = $('#skip');
+  if (it.type === 'open' || it.type === 'guess') {
+    if (send) send.onclick = () => { const v = $('#ans').value.trim(); if (!v) return toast('כתבו משהו, או דלגו'); send.disabled = true; submit(v); };
+  }
+  if (it.type === 'empathy' && send) {
+    const getF = bindFeel('fg');
+    send.onclick = () => { const f = getF(); if (!f.length) return toast('בחרו לפחות רגש אחד'); send.disabled = true; submit({ f, h: ($('#help').value || '').trim() }); };
+  }
+  if (skip) skip.onclick = () => submit(null, true);
+  app.querySelectorAll('.mark[data-p]').forEach(b => b.onclick = () => { const on = (r.marks || {})[b.dataset.p] === r.idx; store.update(S.code, { ['marks.' + b.dataset.p]: on ? null : r.idx }); });
+  app.querySelectorAll('.mark[data-h]').forEach(b => b.onclick = () => { const on = (r.hearts || {})[b.dataset.h] === r.idx; store.update(S.code, { ['hearts.' + b.dataset.h]: on ? null : r.idx }); });
+  const tg = $('#tryG');
+  if (tg) {
+    const tryIt = () => {
+      const v = norm($('#guess').value);
+      if (!v) return;
+      if (it.z.answers.some(x => norm(x) === v)) store.update(S.code, { solved: { r: r.idx, by: me.name, g: me.gender } });
+      else { toast('עוד לא… תשתפו עוד רמזים 🔎'); $('#guess').select(); }
+    };
+    tg.onclick = tryIt; $('#guess').onkeydown = e => { if (e.key === 'Enter') tryIt(); };
+  }
+  const gu = $('#giveUp'); if (gu) gu.onclick = () => store.update(S.code, { phase: 'reveal' });
+  $('#leave').onclick = leaveMidGame;
+}
+
+async function leaveMidGame() {
+  if (isHost()) { if (!(await confirmLeave())) return; await store.deleteRoom(S.code).catch(() => {}); leave(); }
+  else if (await askConfirm('לצאת מהמשחק?')) leave();
+}
+
+function renderThanks(r) {
+  const me = S.me; const others = players(r).filter(p => p.id !== me.id); const mine = (r.thanks || {})[me.id];
+  if (r.phase === 'write') {
+    app.innerHTML = `${demoBar()}${header(r)}<div class="card"><span class="badge b-open">פתקי תודה</span>
+      <h2>לפני שמסיימים 💌</h2><p>${me.gender === 'f' ? 'כתבי' : 'כתוב'} לכל אחד משפט קצר: משהו ש${me.gender === 'f' ? 'את מעריכה' : 'אתה מעריך'} בו, או משהו שנהנית ממנו היום. הפתקים אנונימיים.</p>
+      ${mine ? '<div class="note">הפתקים נשלחו ✓</div>' : others.map(p => `<label>ל${esc(p.name)}</label><textarea data-to="${p.id}" placeholder="משהו ש${me.gender === 'f' ? 'אני מעריכה' : 'אני מעריך'} ב${esc(p.name)}…"></textarea>`).join('') + '<button class="btn" id="send">שליחת הפתקים</button>'}
+      ${waitingHtml()}${hostBar('לקריאת הפתקים', () => store.update(S.code, { phase: 'read' }), true)}</div>`;
+    const send = $('#send');
+    if (send) send.onclick = async () => {
+      const out = {}; app.querySelectorAll('textarea[data-to]').forEach(t => { const v = t.value.trim(); if (v) out[t.dataset.to] = v; });
+      send.disabled = true;
+      try { await store.update(S.code, { ['thanks.' + me.id]: out }); } catch (e) { send.disabled = false; toast('לא נשלח, נסו שוב'); }
+    };
+  } else {
+    const got = Object.entries(r.thanks || {}).filter(([from]) => from !== me.id).map(([, m]) => m[me.id]).filter(Boolean);
+    app.innerHTML = `${demoBar()}${header(r)}<div class="card"><h2>הפתקים שקיבלת 💌</h2>
+      ${got.length ? shuffle(got).map(t => `<div class="note">${esc(t)}</div>`).join('') : '<p class="muted">הפעם לא הגיעו פתקים, אבל היית חלק מכל הסבבים ❤️</p>'}
+      <p class="muted">אפשר לבחור פתק אחד ולהקריא אותו בקול.</p>
+      ${hostBar('לכרטיס הסיכום', () => store.update(S.code, { status: 'closing', phase: 'write', closing: {} }), true)}</div>`;
+  }
+  $('#leave') && ($('#leave').onclick = leaveMidGame);
+}
+
+function renderClosing(r) {
+  const me = S.me; const mine = (r.closing || {})[me.id];
+  if (r.phase === 'write') {
+    app.innerHTML = `${demoBar()}${header(r)}<div class="card"><h2>מה לקחנו מהערב</h2><p class="muted">התשובות ייכנסו לכרטיס הסיכום המשפחתי.</p>
+      ${mine ? '<div class="note">נשלח ✓</div>' : `<label>רגע אחד מהמשחק ש${me.gender === 'f' ? 'אני לוקחת' : 'אני לוקח'} איתי</label><textarea id="c1"></textarea>
+      <label>דבר אחד שהייתי רוצה שנעשה יחד השבוע</label><textarea id="c2"></textarea>
+      <label>רעיון לבילוי המשפחתי של החודש 🗓️</label><textarea id="c3" placeholder="למשל: פיקניק בפארק, ערב משחקים, טיול בטבע…"></textarea><button class="btn" id="send">שליחה</button>`}
+      ${waitingHtml()}${hostBar('לכרטיס הסיכום', () => store.update(S.code, { phase: 'card' }), true)}</div>`;
+    const send = $('#send');
+    if (send) send.onclick = async () => {
+      const a = $('#c1').value.trim(), b = $('#c2').value.trim(), c = $('#c3').value.trim();
+      if (!a && !b && !c) return toast('כתבו לפחות משפט אחד');
+      send.disabled = true;
+      try { await store.update(S.code, { ['closing.' + me.id]: { a, b, c } }); } catch (e) { send.disabled = false; toast('לא נשלח, נסו שוב'); }
+    };
+  } else {
+    app.innerHTML = `${demoBar()}${finalCard(r)}${hostBar('סיום ושליחת הסיכומים', async () => {
+      if (!r.trial) try { await store.saveSummary(summaryRecord(r)); } catch (e) { console.error(e); toast('הסיכום למנחה לא נשלח, נסו שוב'); throw e; }
+      await store.update(S.code, { status: 'ended' }); setTimeout(() => store.deleteRoom(S.code).catch(() => {}), 15000);
+    }, true)}`;
+  }
+}
+
+function finalCard(r) {
+  const d = new Date();
+  const rows = players(r).map(p => { const c = (r.closing || {})[p.id]; return c ? `<div class="ans"><b>${esc(p.name)}</b>${c.a ? '✨ ' + esc(c.a) : ''}${c.b ? `<div style="margin-top:4px">🤝 ${esc(c.b)}</div>` : ''}${c.c ? `<div style="margin-top:4px">🗓️ ${esc(c.c)}</div>` : ''}</div>` : ''; }).join('');
+  return `<div class="card final"><div class="center"><div class="logo" style="font-size:40px">🫶</div><h2>מה לקחנו מהערב</h2>
+    <div class="muted">${d.toLocaleDateString('he-IL')} · ${esc(MODES[r.mode] || '')}${catsLabel(r.cats) ? ' · ' + esc(catsLabel(r.cats)) : ''}</div>
+    <p class="big" style="margin-top:10px">צברנו יחד ❤️ ${r.score || 0} נקודות</p></div>
+    ${rows || '<p class="muted center">לא נכתבו תשובות</p>'}
+    <p class="muted center" style="margin-top:12px">📸 צלמו מסך והביאו את הכרטיס לפגישה הבאה</p></div>`;
+}
+
+// ================= סיכומים =================
+function summaryRecord(r) {
+  return {
+    id: 's' + Date.now() + rid().slice(0, 4), createdAt: Date.now(), family: r.family || '', mode: r.mode || '', cats: r.cats || [],
+    score: r.score || 0, players: r.players || {}, log: r.log || {}, thanks: r.thanks || {}, closing: r.closing || {}
+  };
+}
+// ================= ניתוח הסיכום =================
+const FEEL_INFO = [
+  'שמחה מסמנת שמשהו חשוב התמלא: קרבה, הצלחה או הנאה. כדאי לשים לב מה יצר אותה ולעשות ממנו עוד.',
+  'התרגשות מופיעה כשמשהו נוגע בנו או חשוב לנו. היא מזמינה לשתף ולחגוג יחד.',
+  'רוגע מגיע כשמרגישים בטוחים ומקובלים. הוא סימן שהסביבה נותנת מקום ושקט.',
+  'תחושת אהבה עולה כשרואים אותנו ודואגים לנו. מחוות קטנות ויומיומיות מזינות אותה יותר מכל דבר גדול.',
+  'הפתעה מופיעה כשמשהו לא צפוי קורה. היא יכולה להיות נעימה או מבלבלת, ועוזר לשאול "איך זה היה בשבילך?".',
+  'מבוכה עולה כשמרגישים חשופים מול אחרים. עוזרים בה חיוך מקבל, הומור עדין ולא להמשיך להתעכב על הרגע.',
+  'עצב מסמן שמשהו חשוב חסר או אבד. לא צריך לתקן אותו מהר. נוכחות, חיבוק והקשבה עוזרים יותר מעצות.',
+  'כעס מסמן שגבול נחצה או שמשהו נראה לא הוגן. מאחוריו יש בדרך כלל צורך: כבוד, צדק או להישמע. עוזר לשאול מה הצורך, אחרי שהסערה נרגעת.',
+  'תסכול עולה כשמשקיעים ומשהו נתקע. עוזרים בו הכרה במאמץ, הפסקה קצרה ועזרה מעשית אם מבקשים.',
+  'לחץ מופיע כשהדרישות גדולות מהכוחות. עוזר להוריד עומס, לחלק משימה לצעדים קטנים ולהזכיר שלא לבד.',
+  'בדידות עולה כשמרגישים לא שייכים או לא מובנים. הזמנה פשוטה להיות יחד, בלי תנאים, יכולה לשנות הרבה.',
+  'אכזבה מגיעה כשציפייה לא התממשה. כדאי לתת לה מקום ולדבר על מה שקיווינו לו, בלי להקטין.'
+];
+const OUTINGS = {
+  p: ['ארוחת ערב זוגית בלי טלפונים', 'הליכה של שעה בערב, רק שניכם', 'חזרה למקום מאחד הדייטים הראשונים', 'סדנה משותפת: בישול, קרמיקה או ריקוד', 'בוקר של קפה ומאפה בבית קפה חדש', 'ערב סרט בבית, וכל אחד מפנק את השני בנשנוש שהוא אוהב', 'טיול זריחה או שקיעה עם תרמוס קפה', 'לילה בצימר או חדר במלון, גם קרוב לבית'],
+  s: ['ארוחה של האחים בלבד, וכל אחד בוחר מנה לשני', 'משחק שאהבתם בילדות, בגרסה של היום', 'רכיבה על אופניים או טיול קצר', 'בישול משותף של מתכון משפחתי', 'חדר בריחה, שבו רק יחד מצליחים', 'צפייה בסרט שאהבתם כילדים', 'יציאה לגלידה ושיחה בדרך הארוכה הביתה', 'פרויקט קטן יחד: לצבוע, לבנות, לשתול'],
+  f: ['פיקניק בפארק עם משחק כדור', 'ערב משחקי קופסה, וכל אחד בוחר משחק', 'טיול טבע קצר עם עצירה לגלידה', 'ערב בישול משפחתי: כל אחד אחראי על מנה', 'יום "כן": כל אחד בוחר פעילות של שעה', 'ערב אלבומים: מסתכלים בתמונות ישנות ומספרים סיפורים', 'יום התנדבות משפחתי', 'ערב קולנוע ביתי עם כרטיסים ופופקורן']
+};
+const THEMES = [
+  ['הכרה והערכה', /מוערך|מוערכת|מחמא|מעריך|מעריכה|אהוב|אהובה|תודה/],
+  ['מה עוזר ברגעים קשים', /קשה|מרגיע|להיטען|צריך|צריכה|עוזר לך|כועס|עצוב|לחוץ/],
+  ['זמן ביחד', /בילוי|יחד|לבלות|יציאה|זמן|לעשות עם|דייט/],
+  ['חלומות ורצונות', /חלום|להגשים|לנסות|רוצה|רוצים/],
+  ['זיכרונות', /זיכרון|זוכר|זוכרת|ילדות|כשהיית/],
+  ['הבית והכללים', /כלל|מותר|אסור/]
+];
+function themeOf(text) { const t = THEMES.find(([, re]) => re.test(text || '')); return t ? t[0] : 'עוד דברים ששיתפו'; }
+function seededPick(arr, n, seed) {
+  const a = arr.slice(); let s = Math.abs(seed | 0) || 7;
+  for (let i = a.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; const j = Math.floor(s / 233280 * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a.slice(0, n);
+}
+function joinNames(arr) { return arr.length <= 1 ? (arr[0] || '') : arr.slice(0, -1).join(', ') + ' ו' + arr[arr.length - 1]; }
+
+function analysisSections(src, viewerId, ps, PP, log) {
+  const out = [];
+  const real = l => l.answers && l.answers[l.subjectId];
+  const focus = viewerId ? ps.filter(p => p.id === viewerId) : ps;
+
+  // 1. מה חשוב לכל אחד
+  const imp = focus.map(p => {
+    const said = [];
+    log.forEach(l => {
+      if (l.skipped || !l.answers) return;
+      const x = l.answers[p.id];
+      if (l.type === 'open' && x && !x.skip && x.v) said.push([themeOf(l.q.text), g(l.q.text, p.gender), x.v]);
+      if (l.type === 'guess' && l.subjectId === p.id && x && !x.skip && x.v) said.push([themeOf(l.q.q), g(l.q.self, p.gender), x.v]);
+      if (l.type === 'empathy' && l.subjectId === p.id && x && x.v && x.v.h) said.push(['מה עוזר ברגעים קשים', g(l.q.self, p.gender), 'מה היה עוזר: ' + x.v.h]);
+    });
+    const c = (src.closing || {})[p.id];
+    if (c && c.b) said.push(['זמן ביחד', 'דבר שהייתי רוצה שנעשה יחד השבוע', c.b]);
+    if (!said.length) return null;
+    const count = {}; said.forEach(([t]) => { if (t !== 'עוד דברים ששיתפו') count[t] = (count[t] || 0) + 1; });
+    const top = Object.entries(count).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
+    const lines = [];
+    if (top.length) lines.push(`מהתשובות של ${p.name} עולה שהכי ${top.length > 1 ? 'מעסיקים' : 'מעסיק'} ${gw(p, 'אותו', 'אותה')}: ${top.join(' וגם ')}.`);
+    const order = t => top.indexOf(t) >= 0 ? top.indexOf(t) : 9;
+    said.sort((a, b) => order(a[0]) - order(b[0])).slice(0, 5).forEach(([t, q, v]) => lines.push(`• ${q}: ${v}`));
+    return { t: p.name, lines };
+  }).filter(Boolean);
+  if (imp.length) out.push({ h: viewerId ? 'מה חשוב לך, לפי מה ששיתפת' : 'מה חשוב לכל אחד', items: imp });
+
+  // 2. כמה אנחנו מכירים זה את זה
+  const know = {};
+  log.forEach(l => {
+    if (l.skipped || !l.answers || !real(l) || real(l).skip) return;
+    const guessers = Object.entries(l.answers).filter(([pid, x]) => pid !== l.subjectId && x && !x.skip);
+    if (!guessers.length) return;
+    const k = know[l.subjectId] = know[l.subjectId] || { n: 0, hit: 0 };
+    if (l.type === 'guess') guessers.forEach(([pid]) => { k.n++; if ((l.marks || {})[pid] === l.i) k.hit++; });
+    if (l.type === 'empathy') { const rf = (real(l).v && real(l).v.f) || []; guessers.forEach(([, x]) => { k.n++; if ((x.v.f || []).some(f => rf.includes(f))) k.hit++; }); }
+  });
+  const knowItems = ps.filter(p => know[p.id] && know[p.id].n).map(p => {
+    const k = know[p.id], rate = k.hit / k.n;
+    let txt;
+    if (rate >= .6) txt = `${gw(p, 'הוא', 'היא')} מוכר${p.gender === 'f' ? 'ת' : ''} היטב למשפחה: רוב הניחושים והרגשות שזיהו היו קרובים. זו קרבה ששווה לשמור עליה.`;
+    else if (rate >= .3) txt = `יש היכרות טובה, ובכל זאת ${p.name} ${gw(p, 'הפתיע', 'הפתיעה')} בכמה תשובות. שווה לשאול ${gw(p, 'אותו', 'אותה')} עוד על הנושאים האלה.`;
+    else txt = `הפעם ${p.name} ${gw(p, 'הפתיע', 'הפתיעה')} בתשובות. זו הזדמנות טובה לסקרנות: לשאול, להקשיב, ולגלות עוד דברים ש${gw(p, 'מעסיקים אותו', 'מעסיקים אותה')}.`;
+    return { t: `${p.name}: ${k.hit} מתוך ${k.n} ניחושים קלעו`, lines: [txt] };
+  });
+  if (knowItems.length) out.push({ h: 'כמה אנחנו מכירים זה את זה', items: knowItems.concat([{ lines: ['נספרים ניחושים שסומנו ❤️ כקרובים, ורגשות שזוהו נכון.'] }]) });
+
+  // 3. הרגשות שלנו
+  const felt = {}, gaps = [];
+  log.forEach(l => {
+    if (l.type !== 'empathy' || l.skipped || !real(l) || real(l).skip) return;
+    const s = PP(l.subjectId); const rf = (real(l).v && real(l).v.f) || [];
+    rf.forEach(f => { (felt[f] = felt[f] || new Set()).add(s.name); });
+    const miss = Object.entries(l.answers).filter(([pid, x]) => pid !== l.subjectId && x && x.v && x.v.f && !x.v.f.some(f => rf.includes(f)));
+    if (rf.length && miss.length && (!viewerId || viewerId === l.subjectId || miss.some(([pid]) => pid === viewerId))) {
+      const guessedF = Array.from(new Set(miss.flatMap(([, x]) => x.v.f)));
+      gaps.push(`${g(l.q.q, s.gender, s.name)} חשבו ש${s.name} ${gw(s, 'ירגיש', 'תרגיש')} ${feelText(guessedF, s.gender)}, אבל ${gw(s, 'הוא', 'היא')} ${gw(s, 'הרגיש', 'הרגישה')} ${feelText(rf, s.gender)}.`);
+    }
+  });
+  const feelItems = Object.entries(felt).map(([f, names]) => ({ t: `${FEELINGS[f][0]} ${FEELINGS[f][1]} (${joinNames(Array.from(names))})`, lines: [FEEL_INFO[f]] }));
+  if (gaps.length) feelItems.push({ t: 'איפה הרגשות הפתיעו', lines: gaps.concat(['פער כזה הוא לא טעות. הוא מראה שכל אחד חווה את אותו רגע אחרת, ושכדאי לשאול "איך זה בשבילך?" לפני שמניחים.']) });
+  if (feelItems.length) out.push({ h: 'הרגשות שלנו', items: feelItems });
+
+  // 4. מה עוזר: רעיונות שסומנו כמועילים
+  const helps = [];
+  log.forEach(l => {
+    if (l.type !== 'empathy' || !l.answers) return;
+    const s = PP(l.subjectId);
+    Object.entries(l.hearts || {}).forEach(([pid, idx]) => {
+      const x = l.answers[pid];
+      if (idx === l.i && x && x.v && x.v.h && (!viewerId || viewerId === pid || viewerId === l.subjectId)) helps.push(`${s.name} ${gw(s, 'אמר', 'אמרה')} שזה היה עוזר: ${x.v.h}`);
+    });
+  });
+  if (helps.length) out.push({ h: 'מה עוזר לנו כשקשה', items: [{ lines: helps }] });
+
+  // 5. רעיונות לבילויים
+  const ours = [];
+  log.forEach(l => {
+    if (l.skipped || !l.answers) return;
+    const txt = l.type === 'open' ? l.q.text : (l.q && l.q.q) || '';
+    if (!/בילוי|לבלות|לעשות יחד|יציאה|לעשות איתך|לעשות איתו|לעשות איתה|לעשות עם/.test(txt)) return;
+    Object.entries(l.answers).forEach(([pid, x]) => {
+      if (x && !x.skip && typeof x.v === 'string' && (l.type === 'open' || pid === l.subjectId)) ours.push(`${x.v} (${PP(pid).name})`);
+    });
+  });
+  ps.forEach(p => { const c = (src.closing || {})[p.id]; if (c && c.c) ours.push(`${c.c} (${p.name})`); });
+  const sugg = seededPick(OUTINGS[src.mode] || OUTINGS.f, 3, src.createdAt || 1);
+  const ideaItems = [];
+  if (ours.length) ideaItems.push({ t: 'מה שאתם הצעתם', lines: Array.from(new Set(ours)).map(x => '🗓️ ' + x) });
+  ideaItems.push({ t: 'עוד רעיונות שמתאימים לכם', lines: sugg.map(x => '✨ ' + x) });
+  ideaItems.push({ lines: ['טיפ: בחרו רעיון אחד, קבעו תאריך כבר עכשיו, ותנו לכל אחד תפקיד קטן בתכנון.'] });
+  out.push({ h: 'רעיונות לבילויים', items: ideaItems });
+  return out;
+}
+
+function summarySections(src, viewerId) {
+  const ps = Object.entries(src.players || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => a.joinedAt - b.joinedAt);
+  const PP = id => (src.players || {})[id] || { name: '?', gender: 'm' };
+  const viewer = viewerId ? PP(viewerId) : null;
+  const log = Object.values(src.log || {}).sort((a, b) => a.i - b.i);
+  const ansTxt = (p, x) => !x ? gw(p, 'לא ענה', 'לא ענתה') : x.skip ? gw(p, 'דילג', 'דילגה') : null;
+  const sections = [];
+  const topics = Array.from(new Set(log.filter(l => l.q && l.q.topic).map(l => (window.TOPICS[l.q.topic] || {}).name).filter(Boolean)));
+
+  if (viewerId) {
+    const notes = Object.entries(src.thanks || {}).filter(([f]) => f !== viewerId).map(([, m]) => m[viewerId]).filter(Boolean);
+    sections.push({ h: 'פתקי התודה שקיבלת', items: [{ lines: notes.length ? notes.map(n => '💌 ' + n) : ['הפעם לא הגיעו פתקים'] }] });
+  } else {
+    const flags = [];
+    log.forEach(l => {
+      const qt = l.q ? (l.type === 'open' ? g(l.q.text, 'm') : g(l.q.q, PP(l.subjectId).gender, PP(l.subjectId).name)) : '';
+      if (l.skipped) flags.push(`הסבב "${qt || 'חידה'}" דולג כולו`);
+      Object.entries(l.answers || {}).forEach(([pid, x]) => { if (x.skip) flags.push(`${PP(pid).name} ${gw(PP(pid), 'דילג', 'דילגה')} על: "${qt}"`); });
+      if (l.type === 'empathy' && !l.skipped) {
+        const real = (l.answers[l.subjectId] && l.answers[l.subjectId].v && l.answers[l.subjectId].v.f) || [];
+        const others = Object.entries(l.answers).filter(([pid, x]) => pid !== l.subjectId && x.v);
+        if (real.length && others.length && !others.some(([, x]) => (x.v.f || []).some(f => real.includes(f))))
+          flags.push(`אף אחד לא זיהה מה ${PP(l.subjectId).name} ${gw(PP(l.subjectId), 'מרגיש', 'מרגישה')} בתרחיש: "${qt}"`);
+      }
+      if (l.type === 'guess' && !l.skipped && Object.values(l.marks || {}).filter(v => v === l.i).length === 0 && Object.keys(l.answers || {}).length > 1)
+        flags.push(`אף ניחוש לא סומן כקרוב לתשובה של ${PP(l.subjectId).name}: "${qt}"`);
+    });
+    sections.push({ h: 'שווה לשים לב', items: [{ lines: flags.length ? flags : ['לא עלו דילוגים או פערים בולטים'] }] });
+  }
+  sections.unshift(...analysisSections(src, viewerId, ps, PP, log));
+  sections.unshift({ h: 'על מה דיברנו', items: [{ lines: [topics.length ? topics.join(' · ') : 'משחק כללי'] }] });
+
+  const rounds = log.map(l => {
+    const it = { t: '', lines: [] };
+    if (l.type === 'puzzle') { it.t = `משימה משותפת: חידה (${(l.z && l.z.answers[0]) || ''})`; it.lines.push(l.solved ? 'נפתרה יחד 🎉' : 'לא נפתרה'); return it; }
+    if (l.skipped && !Object.keys(l.answers || {}).length) { it.t = TYPE_LABEL[l.type]; it.lines.push('הסבב דולג'); return it; }
+    if (l.type === 'open') {
+      it.t = 'שיחה פתוחה: ' + g(l.q.text, viewer ? viewer.gender : 'm');
+      ps.filter(p => !l.q.who || p.role === l.q.who).forEach(p => { const x = l.answers[p.id]; it.lines.push(`${p.name}: ${ansTxt(p, x) || x.v}`); });
+    } else if (l.type === 'guess') {
+      const s = PP(l.subjectId);
+      it.t = 'מפת הלב: ' + (viewerId === l.subjectId ? g(l.q.self, s.gender) : g(l.q.q, s.gender, s.name));
+      const real = l.answers[l.subjectId];
+      it.lines.push(`התשובה של ${s.name}: ${ansTxt(s, real) || real.v}`);
+      ps.filter(p => p.id !== l.subjectId).forEach(p => { const x = l.answers[p.id]; it.lines.push(`הניחוש של ${p.name}: ${ansTxt(p, x) || x.v}${(l.marks || {})[p.id] === l.i ? ' ❤️ קרוב' : ''}`); });
+    } else if (l.type === 'empathy') {
+      const s = PP(l.subjectId);
+      it.t = 'בנעליים של: ' + (viewerId === l.subjectId ? g(l.q.self, s.gender) : g(l.q.q, s.gender, s.name));
+      const real = l.answers[l.subjectId]; const rf = (real && real.v && real.v.f) || [];
+      it.lines.push(`מה ${s.name} ${gw(s, 'הרגיש', 'הרגישה')}: ${ansTxt(s, real) || feelText(rf, s.gender)}${real && real.v && real.v.h ? ' · מה היה עוזר: ' + real.v.h : ''}`);
+      ps.filter(p => p.id !== l.subjectId).forEach(p => {
+        const x = l.answers[p.id]; const t = ansTxt(p, x);
+        if (t) return it.lines.push(`${p.name}: ${t}`);
+        const hit = (x.v.f || []).some(f => rf.includes(f));
+        it.lines.push(`${p.name} ${gw(p, 'חשב', 'חשבה')}: ${feelText(x.v.f, s.gender)}${hit ? ' ✓' : ''}${x.v.h ? ' · רעיון לעזרה: ' + x.v.h + ((l.hearts || {})[p.id] === l.i ? ' ❤️' : '') : ''}`);
+      });
+    }
+    return it;
+  });
+  sections.push({ h: 'השאלות והתשובות', items: rounds });
+
+  if (!viewerId) {
+    const byTo = {};
+    Object.values(src.thanks || {}).forEach(m => Object.entries(m || {}).forEach(([to, t]) => { (byTo[to] = byTo[to] || []).push(t); }));
+    sections.push({ h: 'פתקי תודה (בלי שם הכותב)', items: ps.map(p => ({ t: 'ל' + p.name, lines: (byTo[p.id] || ['לא נכתבו פתקים']).map(t => '💌 ' + t) })) });
+  }
+  sections.push({
+    h: 'מה לקחנו מהערב', items: ps.map(p => {
+      const c = (src.closing || {})[p.id];
+      return { t: p.name, lines: c ? [c.a && 'רגע ש' + gw(p, 'אני לוקח', 'אני לוקחת') + ' איתי: ' + c.a, c.b && 'מה נעשה יחד השבוע: ' + c.b, c.c && 'רעיון לבילוי החודשי: ' + c.c].filter(Boolean) : [gw(p, 'לא כתב', 'לא כתבה')] };
+    })
+  });
+  const ideas = ps.map(p => (src.closing || {})[p.id]).filter(c => c && c.c).map(c => '🗓️ ' + c.c);
+  if (ideas.length) sections.push({ h: 'רעיונות לבילוי המשפחתי החודשי', items: [{ lines: ideas }] });
+  const date = new Date(src.createdAt || Date.now()).toLocaleDateString('he-IL');
+  const meta = `${date} · ${MODES[src.mode] || ''}${catsLabel(src.cats) ? ' · ' + catsLabel(src.cats) : ''} · ❤️ ${src.score || 0} נקודות משפחתיות`;
+  const title = viewerId ? `הסיכום האישי של ${PP(viewerId).name}` : `סיכום משחק: ${src.family || 'משפחה ללא שם'}`;
+  const who = ps.map(p => `${p.name} (${p.role === 'parent' ? (p.gender === 'f' ? 'אמא' : 'אבא') : (p.gender === 'f' ? 'ילדה' : 'ילד')})`).join(', ');
+  return { title, meta, who, sections };
+}
+function summaryHtml(src, viewerId) {
+  const s = summarySections(src, viewerId);
+  return `<div class="card final"><h2>${esc(s.title)}</h2><div class="muted">${esc(s.meta)}</div><div class="muted">משתתפים: ${esc(s.who)}</div>
+    ${s.sections.map(sec => `<h3 style="margin-top:16px">${esc(sec.h)}</h3>${sec.items.map(it => `<div class="ans">${it.t ? `<div style="font-weight:700;margin-bottom:4px">${esc(it.t)}</div>` : ''}${it.lines.map(l => `<div>${esc(l)}</div>`).join('')}</div>`).join('')}`).join('')}</div>`;
+}
+function summaryText(src, viewerId) {
+  const s = summarySections(src, viewerId);
+  const out = [s.title, s.meta, 'משתתפים: ' + s.who, ''];
+  s.sections.forEach(sec => { out.push('*' + sec.h + '*'); sec.items.forEach(it => { if (it.t) out.push('• ' + it.t); it.lines.forEach(l => out.push((it.t ? '   ' : '') + l)); }); out.push(''); });
+  out.push('נוצר במשחק "' + (window.GAME_NAME || 'רגע משפחתי') + '"');
+  return out.join('\n');
+}
+function downloadText(name, text) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/plain;charset=utf-8' }));
+  a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+function renderEnded(r) {
+  const mine = summaryText(r, S.me.id);
+  app.innerHTML = `${demoBar()}<div class="card center"><p class="big">תודה ששיחקתם יחד 🫶</p><p class="muted">${r.trial ? 'זה היה משחק ניסיון, ולכן הסיכום הכללי לא נשמר.' : 'הסיכום הכללי נשלח למנחה.'} כאן למטה הסיכום האישי שלך: ${S.me.gender === 'f' ? 'שמרי' : 'שמור'} אותו לפני שסוגרים את הדף.</p>
+    <button class="btn" id="share">שמירה או שליחה (וואטסאפ, מייל)</button><button class="btn sec" id="dl">הורדה כקובץ</button></div>
+    ${summaryHtml(r, S.me.id)}
+    <button class="btn sec" id="again">משחק חדש</button>`;
+  $('#share').onclick = async () => {
+    if (navigator.share) { try { await navigator.share({ title: 'הסיכום שלי', text: mine }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+    try { await navigator.clipboard.writeText(mine); toast('הסיכום הועתק. אפשר להדביק בוואטסאפ או במייל'); } catch (e) { toast('לא הצלחנו להעתיק, נסו להוריד כקובץ'); }
+  };
+  $('#dl').onclick = () => downloadText('הסיכום-שלי.txt', mine);
+  $('#again').onclick = async () => { if (await askConfirm('לצאת? הסיכום האישי ייסגר. כדאי לשמור אותו קודם.')) leave(); };
+}
+
+// ================= מסך המנחה =================
+let adminList = [];
+function renderAdmin() {
+  S.view = 'admin';
+  store.onAuth(user => {
+    if (location.hash !== '#admin') return;
+    if (!user) return adminLogin();
+    adminHome(user);
+  });
+}
+function adminLogin() {
+  app.innerHTML = `<h2>כניסת מנחה</h2><p class="muted">ניהול מאגר השאלות</p>
+    <label>מייל</label><input type="email" id="em" dir="ltr"><label>סיסמה</label><input type="password" id="pw" dir="ltr">
+    <button class="btn" id="go">כניסה</button><button class="btn ghost" id="back">חזרה למשחק</button>`;
+  $('#back').onclick = () => { location.hash = ''; };
+  $('#go').onclick = async () => { try { await store.signIn($('#em').value.trim(), $('#pw').value); } catch (e) { toast('המייל או הסיסמה לא נכונים'); } };
+}
+async function adminHome(user) {
+  if (!DEMO && window.ADMIN_EMAIL && (user.email || '').toLowerCase() !== window.ADMIN_EMAIL.toLowerCase()) {
+    app.innerHTML = `<div class="card"><p>החשבון ${esc(user.email)} לא מורשה לערוך שאלות.</p><button class="btn sec" id="out">יציאה</button></div>`;
+    $('#out').onclick = () => store.signOut(); return;
+  }
+  app.innerHTML = `<p class="muted center">טוען…</p>`;
+  try { adminList = await store.loadQuestions(); } catch (e) { adminList = []; toast('לא הצלחנו לטעון את המאגר'); }
+  const f = adminHome.f || (adminHome.f = { t: '', topic: '' });
+  const list = adminList.filter(q => (!f.t || q.t === f.t) && (!f.topic || q.topic === f.topic));
+  const topicOpts = Object.entries(window.TOPICS).map(([k, t]) => `<option value="${k}" ${f.topic === k ? 'selected' : ''}>${esc(t.name)}</option>`).join('');
+  app.innerHTML = `${demoBar()}<div class="top"><span>מסך המנחה</span><button class="btn ghost" id="back" style="width:auto;margin:0">חזרה למשחק</button></div>
+    <div class="choice" style="margin-bottom:8px"><button class="on">מאגר השאלות</button><button id="tabSum">סיכומי משחקים</button></div>
+    ${!adminList.length ? `<div class="card"><p>המאגר שלך עוד ריק, אז המשחק משתמש במאגר ההתחלה (${window.DEFAULT_QUESTIONS.length} שאלות).</p>
+      <p class="muted">כדי לערוך או להוסיף שאלות, טעני קודם את מאגר ההתחלה. אחר כך כל שינוי שלך ייכנס למשחק.</p>
+      <button class="btn" id="seed">טעינת מאגר ההתחלה</button></div>` : `
+    <button class="btn coral" id="add">+ שאלה חדשה</button>
+    <div class="row"><select id="ft"><option value="">כל הסוגים</option>${['open', 'guess', 'empathy'].map(t => `<option value="${t}" ${f.t === t ? 'selected' : ''}>${TYPE_LABEL[t]}</option>`).join('')}</select>
+    <select id="ftopic"><option value="">כל הנושאים</option>${topicOpts}</select></div>
+    <div class="card"><div class="muted">${list.length} שאלות</div>
+    ${list.map(q => `<div class="qitem" style="${q.hidden ? 'opacity:.5' : ''}"><div>${esc(q.t === 'open' ? q.text : q.q)}</div>
+      <small>${TYPE_LABEL[q.t]} · ${esc((window.TOPICS[q.topic] || {}).name || q.topic)} · ${(q.modes || '').split('').map(m => MODES[m]).join(', ')}${q.about && q.about !== 'any' ? ' · על ' + (q.about === 'parent' ? 'הורה' : 'ילד או ילדה') : ''}${q.who ? ' · עונים רק ' + WHO_LABEL[q.who] : ''}${q.hidden ? ' · מוסתרת' : ''}</small>
+      <div class="acts"><button data-e="${q.id}">עריכה</button><button data-h="${q.id}">${q.hidden ? 'הצגה' : 'הסתרה'}</button><button data-d="${q.id}">מחיקה</button></div></div>`).join('')}</div>`}
+    ${DEMO ? '' : '<button class="btn ghost" id="out">יציאה מהחשבון</button>'}`;
+  $('#back').onclick = () => { location.hash = ''; };
+  $('#tabSum').onclick = () => adminSummaries(user);
+  const out = $('#out'); if (out) out.onclick = () => store.signOut();
+  const seed = $('#seed'); if (seed) seed.onclick = async () => { seed.disabled = true; await store.seed(window.DEFAULT_QUESTIONS); toast('המאגר נטען'); adminHome(user); };
+  const add = $('#add'); if (add) add.onclick = () => editQuestion(null, user);
+  const ft = $('#ft'); if (ft) ft.onchange = e => { f.t = e.target.value; adminHome(user); };
+  const ftp = $('#ftopic'); if (ftp) ftp.onchange = e => { f.topic = e.target.value; adminHome(user); };
+  app.querySelectorAll('[data-e]').forEach(b => b.onclick = () => editQuestion(adminList.find(q => q.id === b.dataset.e), user));
+  app.querySelectorAll('[data-h]').forEach(b => b.onclick = async () => { const q = adminList.find(q => q.id === b.dataset.h); q.hidden = !q.hidden; await store.saveQuestion(q); adminHome(user); });
+  app.querySelectorAll('[data-d]').forEach(b => b.onclick = async () => { if (!(await askConfirm('למחוק את השאלה?'))) return; await store.deleteQuestion(b.dataset.d); adminHome(user); });
+}
+async function adminSummaries(user, openId) {
+  app.innerHTML = `<p class="muted center">טוען…</p>`;
+  let list = [];
+  try { list = await store.loadSummaries(); } catch (e) { console.error(e); toast('לא הצלחנו לטעון את הסיכומים'); }
+  list.sort((a, b) => b.createdAt - a.createdAt);
+  const open = openId && list.find(x => x.id === openId);
+  if (open) {
+    const txt = summaryText(open, null);
+    app.innerHTML = `${demoBar()}<button class="btn ghost" id="backL" style="width:auto">→ לכל הסיכומים</button>${summaryHtml(open, null)}
+      <button class="btn" id="copy">העתקת הסיכום</button><button class="btn sec" id="dl">הורדה כקובץ</button><button class="btn ghost" id="del">מחיקת הסיכום</button>`;
+    $('#backL').onclick = () => adminSummaries(user);
+    $('#copy').onclick = async () => { try { await navigator.clipboard.writeText(txt); toast('הועתק'); } catch (e) { toast('לא הצלחנו להעתיק'); } };
+    $('#dl').onclick = () => downloadText(`סיכום-${open.family || 'משפחה'}-${new Date(open.createdAt).toLocaleDateString('he-IL').replace(/\./g, '-')}.txt`, txt);
+    $('#del').onclick = async () => { if (!(await askConfirm('למחוק את הסיכום לצמיתות?'))) return; await store.deleteSummary(open.id); adminSummaries(user); };
+    return;
+  }
+  app.innerHTML = `${demoBar()}<div class="top"><span>מסך המנחה</span><button class="btn ghost" id="back" style="width:auto;margin:0">חזרה למשחק</button></div>
+    <div class="choice" style="margin-bottom:8px"><button id="tabQ">מאגר השאלות</button><button class="on">סיכומי משחקים</button></div>
+    <div class="card">${list.length ? list.map(x => `<div class="qitem" style="cursor:pointer" data-o="${x.id}"><b>${esc(x.family || 'משפחה ללא שם')}</b>
+      <div><small>${new Date(x.createdAt).toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' })} · ${esc(MODES[x.mode] || '')} · ${Object.values(x.players || {}).map(p => esc(p.name)).join(', ')}</small></div></div>`).join('')
+      : '<p class="muted">עוד אין סיכומים. אחרי שמשפחה תסיים משחק, הסיכום יופיע כאן.</p>'}</div>`;
+  $('#back').onclick = () => { location.hash = ''; };
+  $('#tabQ').onclick = () => adminHome(user);
+  app.querySelectorAll('[data-o]').forEach(el => el.onclick = () => adminSummaries(user, el.dataset.o));
+}
+function editQuestion(q, user) {
+  const n = q ? Object.assign({}, q) : { id: 'c' + Date.now(), t: 'open', topic: 'pc', modes: 'psf', about: 'any', text: '', q: '', self: '' };
+  const draw = () => {
+    app.innerHTML = `<h2>${q ? 'עריכת שאלה' : 'שאלה חדשה'}</h2>
+    <label>סוג</label><div class="choice" id="t">${['open', 'guess', 'empathy'].map(t => `<button data-v="${t}" class="${n.t === t ? 'on' : ''}">${TYPE_LABEL[t]}</button>`).join('')}</div>
+    <div class="help">${n.t === 'open' ? 'שאלה שכולם עונים עליה. הנוסח מותאם למי שקורא.' : n.t === 'guess' ? 'שאלה על אחד המשתתפים. כולם מנחשים, והוא עונה על עצמו.' : 'תרחיש שקורה לאחד המשתתפים. כולם מנחשים איך הוא מרגיש.'}<br>
+    כתבי <b>{ש}</b> במקום שם המשתתף, ו-<b>[זכר|נקבה]</b> למילים שמשתנות לפי לשון הפנייה. למשל: [אוהב|אוהבת].</div>
+    ${n.t === 'open' ? `<label>השאלה</label><textarea id="text">${esc(n.text)}</textarea>
+       <label>מי עונה?</label><select id="who"><option value="">כולם</option><option value="parent">רק ההורים</option><option value="child">רק הילדים</option></select>` :
+      `<label>הנוסח שכולם רואים (על {ש})</label><textarea id="qq">${esc(n.q)}</textarea>
+       <label>הנוסח שהמשתתף עצמו רואה (בגוף שני)</label><textarea id="self">${esc(n.self)}</textarea>
+       <label>על מי השאלה יכולה להיות?</label><select id="about"><option value="any">כל אחד</option><option value="parent">רק הורה</option><option value="child">רק ילד או ילדה</option></select>`}
+    <label>נושא</label><select id="topic">${Object.entries(window.TOPICS).map(([k, t]) => `<option value="${k}">${esc(t.name)}${t.general ? ' (מאגר כללי)' : ''}</option>`).join('')}</select>
+    <label>מתאים למצבים</label><div class="checks">${Object.entries(MODES).map(([k, v]) => `<label><input type="checkbox" value="${k}" ${n.modes.includes(k) ? 'checked' : ''}> ${v}</label>`).join('')}</div>
+    <div class="card" id="prev"></div>
+    <button class="btn" id="save">שמירה</button><button class="btn ghost" id="cancel">ביטול</button>`;
+    const ab = $('#about'); if (ab) ab.value = n.about || 'any';
+    const wh = $('#who'); if (wh) wh.value = n.who || '';
+    $('#topic').value = n.topic;
+    const read = () => {
+      if ($('#text')) n.text = $('#text').value; if ($('#qq')) n.q = $('#qq').value; if ($('#self')) n.self = $('#self').value;
+      if (ab) n.about = ab.value; if (wh) n.who = wh.value; n.topic = $('#topic').value;
+      n.modes = Array.from(app.querySelectorAll('.checks input:checked')).map(i => i.value).join('');
+    };
+    const prev = () => {
+      read();
+      const p = $('#prev');
+      p.innerHTML = '<b>תצוגה מקדימה</b>' + (n.t === 'open'
+        ? `<div class="ans"><b>לבן</b>${esc(g(n.text, 'm'))}</div><div class="ans"><b>לבת</b>${esc(g(n.text, 'f'))}</div>`
+        : `<div class="ans"><b>על יואב</b>${esc(g(n.q, 'm', 'יואב'))}</div><div class="ans"><b>על נועה</b>${esc(g(n.q, 'f', 'נועה'))}</div><div class="ans"><b>נועה רואה</b>${esc(g(n.self, 'f'))}</div>`);
+    };
+    app.querySelectorAll('textarea,select,input').forEach(el => el.oninput = el.onchange = prev);
+    prev();
+    $('#t').querySelectorAll('button').forEach(b => b.onclick = () => { read(); n.t = b.dataset.v; draw(); });
+    $('#cancel').onclick = () => adminHome(user);
+    $('#save').onclick = async () => {
+      read();
+      if (n.t === 'open' ? !n.text.trim() : (!n.q.trim() || !n.self.trim())) return toast('חסר נוסח לשאלה');
+      if (n.t !== 'open' && !n.q.includes('{ש}')) return toast('בנוסח שכולם רואים צריך להופיע {ש}');
+      if (!n.modes) return toast('בחרי לפחות מצב אחד');
+      const clean = { id: n.id, t: n.t, topic: n.topic, modes: n.modes, hidden: !!n.hidden };
+      if (n.t === 'open') { clean.text = n.text.trim(); if (n.who) clean.who = n.who; } else { clean.q = n.q.trim(); clean.self = n.self.trim(); clean.about = n.about || 'any'; }
+      try { await store.saveQuestion(clean); toast('נשמר'); adminHome(user); } catch (e) { console.error(e); toast('השמירה נכשלה'); }
+    };
+  };
+  draw();
+}
+
+// ================= ניתוב =================
+function route() {
+  if (location.hash === '#admin') return renderAdmin();
+  if (S.code && S.me) return; // כבר במשחק
+  renderHome();
+}
+window.addEventListener('hashchange', () => { if (location.hash !== '#admin' && S.code && S.me) { S.key = ''; renderGame(); } else route(); });
+
+// חזרה למשחק אחרי רענון
+try {
+  let sv = null; try { sv = JSON.parse(sessionStorage.getItem('fg_me') || 'null'); } catch (e) {}
+  if (!sv) sv = JSON.parse(LS.getItem('fg_me') || 'null');
+  if (sv && Date.now() - (sv.t || 0) > 12 * 3600e3) sv = null;
+  if (sv && sv.me && sv.code) { S.me = sv.me; S.code = sv.code; connect(); }
+} catch (e) {}
+document.title = window.GAME_NAME || document.title;
+if (!(S.code && S.me) || location.hash === '#admin') route();
+})();
+
+</script>
+</body>
+</html>
