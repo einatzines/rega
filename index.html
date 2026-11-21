@@ -62,6 +62,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#B7A9E6;box-sh
 .center{text-align:center}
 .celebrate{font-size:54px;text-align:center;animation:pop .5s ease}
 @keyframes pop{0%{transform:scale(.3);opacity:0}80%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.btn.locked{opacity:.45}
 .final{background:linear-gradient(160deg,#FFFFFF,#F6F1FD 60%,#FDF0EB);border:2px solid var(--lav)}
 .final h2{color:var(--teal)}
 .note{background:var(--sun-l);border-radius:14px;padding:14px;margin:8px 0;font-size:18px}
@@ -109,18 +110,26 @@ window.FIREBASE_CONFIG = {
 // מצבים (modes): p = הורים, s = אחים, f = כל המשפחה
 // על מי (about): any = כל אחד, parent = הורה, child = ילד/ה
 // מי עונה בשאלה פתוחה (who): בלי = כולם, parent = רק ההורים, child = רק הילדים
+// עומק (lvl): 1 קליל, 2 אישי, 3 עמוק. במשחק זוגי השאלות מתקדמות מהקליל לעמוק
 
 window.TOPICS = {
-  pc:      { name: 'יחסי הורים וילדים', general: true },
-  sib:     { name: 'קשר בין אחים', general: true },
-  rules:   { name: 'מותר ואסור בבית', general: true },
-  quality: { name: 'זמן איכות', general: true },
-  fun:     { name: 'היכרות וכיף', general: true },
-  couple:  { name: 'זוגיות', general: false },
-  teens:   { name: 'בני נוער', general: false },
-  distant: { name: 'אחים שהתרחקו', general: false },
-  newbaby: { name: 'אח או אחות חדשים', general: false },
-  reserve: { name: 'תקופת מילואים', general: false }
+  // modes = באילו מצבי משחק הנושא מופיע לבחירה (p הורים, s אחים, f כל המשפחה)
+  // core = באילו מצבים הנושא נבחר מראש וחלק מהמאגר הבסיסי (ברירת מחדל: modes, אם general)
+  lovemap:    { name: 'מפת האהבה: כמה אנחנו מכירים', general: true, modes: 'p' },
+  inner:      { name: 'העולם הפנימי שלי', general: true, modes: 'p' },
+  dreams:     { name: 'חלומות ושאיפות', general: true, modes: 'p' },
+  story:      { name: 'הסיפור שלנו', general: true, modes: 'p' },
+  appreciate: { name: 'הערכה והוקרה', general: true, modes: 'p' },
+  couple:     { name: 'זוגיות והורות', general: true, modes: 'p' },
+  pc:      { name: 'יחסי הורים וילדים', general: true, modes: 'psf', core: 'sf' },
+  sib:     { name: 'קשר בין אחים', general: true, modes: 'sf' },
+  rules:   { name: 'מותר ואסור בבית', general: true, modes: 'sf' },
+  quality: { name: 'זמן איכות', general: true, modes: 'psf', core: 'sf' },
+  fun:     { name: 'היכרות וכיף', general: true, modes: 'sf' },
+  teens:   { name: 'בני נוער', general: false, modes: 'psf' },
+  distant: { name: 'אחים שהתרחקו', general: false, modes: 'sf' },
+  newbaby: { name: 'אח או אחות חדשים', general: false, modes: 'psf' },
+  reserve: { name: 'תקופת מילואים', general: false, modes: 'psf' }
 };
 
 window.DEFAULT_QUESTIONS = [
@@ -241,7 +250,86 @@ window.DEFAULT_QUESTIONS = [
   { id:'ce1', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'{ש} [חזר הביתה, ובן או בת הזוג חיכו לו|חזרה הביתה, ובן או בת הזוג חיכו לה] עם כוס קפה ושאלו איך עבר היום.', self:'חזרת הביתה, ובן או בת הזוג חיכו לך עם כוס קפה ושאלו איך עבר היום.' },
   { id:'ce2', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'ויכוח על הילדים התחיל לידם, ו{ש} [הרגיש שלא מגבים אותו|הרגישה שלא מגבים אותה].', self:'ויכוח על הילדים התחיל לידם, [והרגשת שלא מגבים אותך|והרגשת שלא מגבים אותך].' },
   { id:'ce3', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'בן או בת הזוג אמרו מול הילדים כמה הם [מעריכים את {ש}|מעריכים את {ש}].', self:'בן או בת הזוג אמרו מול הילדים כמה הם מעריכים אותך.' },
-  { id:'ce4', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'{ש} [ביקש|ביקשה] ערב זוגי, והתוכנית התבטלה בגלל סידורים של הילדים.', self:'ביקשת ערב זוגי, והתוכנית התבטלה בגלל סידורים של הילדים.' }
+  { id:'ce4', t:'empathy', topic:'couple', modes:'p', about:'parent', q:'{ש} [ביקש|ביקשה] ערב זוגי, והתוכנית התבטלה בגלל סידורים של הילדים.', self:'ביקשת ערב זוגי, והתוכנית התבטלה בגלל סידורים של הילדים.' },
+  // ---------- זוגיות: מפת האהבה, עולם פנימי, חלומות, הסיפור שלנו, הערכה (בהשראת גישת גוטמן, בניסוח מקורי) ----------
+  { id:'lm1', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'מי שני החברים הכי קרובים של {ש} היום?', self:'מי שני החברים הכי קרובים שלך היום?' },
+  { id:'lm2', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איזו מוזיקה או איזה זמר {ש} הכי [אוהב|אוהבת] לשמוע?', self:'איזו מוזיקה או איזה זמר [אתה הכי אוהב|את הכי אוהבת] לשמוע?' },
+  { id:'lm3', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'מה {ש} [לבש|לבשה] כשנפגשתם בפעם הראשונה?', self:'מה לבשת כשנפגשנו בפעם הראשונה?' },
+  { id:'lm4', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'לאיזה תחביב {ש} [היה רוצה|הייתה רוצה] להקדיש יותר זמן?', self:'לאיזה תחביב היית רוצה להקדיש יותר זמן?' },
+  { id:'lm5', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איזה סרט או סדרה {ש} [יכול|יכולה] לראות שוב ושוב?', self:'איזה סרט או סדרה [אתה יכול|את יכולה] לראות שוב ושוב?' },
+  { id:'lm6', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איזו ארוחה הכי משמחת את {ש}?', self:'איזו ארוחה הכי משמחת אותך?' },
+  { id:'lm7', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איך {ש} הכי [אוהב|אוהבת] לבלות ערב פנוי?', self:'איך [אתה הכי אוהב|את הכי אוהבת] לבלות ערב פנוי?' },
+  { id:'lm8', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איזה סוג של מתנה הכי משמח את {ש}?', self:'איזה סוג של מתנה הכי משמח אותך?' },
+  { id:'lm9', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'מה החופשה הכי טובה ש{ש} [זוכר|זוכרת]?', self:'מה החופשה הכי טובה [שאתה זוכר|שאת זוכרת]?' },
+  { id:'lm10', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'על איזה קינוח {ש} אף פעם לא [מוותר|מוותרת]?', self:'על איזה קינוח [אתה אף פעם לא מוותר|את אף פעם לא מוותרת]?' },
+  { id:'lm11', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איזה מאכל {ש} ממש לא [סובל|סובלת]?', self:'איזה מאכל [אתה ממש לא סובל|את ממש לא סובלת]?' },
+  { id:'lm12', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'איזה חג {ש} הכי [אוהב|אוהבת], ולמה?', self:'איזה חג [אתה הכי אוהב|את הכי אוהבת], ולמה?' },
+  { id:'lm13', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'מה {ש} [היה עושה|הייתה עושה] עם זכייה גדולה בלוטו?', self:'מה היית עושה עם זכייה גדולה בלוטו?' },
+  { id:'lm14', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:1, q:'מה {ש} [עושה|עושה] כדי לזוז ולהתאוורר, כשיש זמן?', self:'מה [אתה עושה|את עושה] כדי לזוז ולהתאוורר, כשיש זמן?' },
+  { id:'lm15', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'איזה לחץ {ש} [סוחב|סוחבת] בתקופה הזו?', self:'איזה לחץ [אתה סוחב|את סוחבת] בתקופה הזו?' },
+  { id:'lm16', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'מה {ש} [עשה|עשתה] אתמול, מהבוקר עד הערב? נסו לפרט.', self:'מה עשית אתמול, מהבוקר עד הערב?' },
+  { id:'lm17', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'מה הכי עוזר ל{ש} להירגע אחרי יום קשה?', self:'מה הכי עוזר לך להירגע אחרי יום קשה?' },
+  { id:'lm18', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'מי, חוץ ממך, הכי תומך ב{ש} בתקופה הזו?', self:'מי, חוץ מבן או בת הזוג, הכי תומך בך בתקופה הזו?' },
+  { id:'lm19', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'במה {ש} [מרגיש|מרגישה] הכי [מוכשר|מוכשרת]?', self:'במה [אתה מרגיש|את מרגישה] הכי [מוכשר|מוכשרת]?' },
+  { id:'lm20', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'איזה אירוע קרוב מעסיק את {ש}, ואיך [הוא מרגיש|היא מרגישה] לקראתו?', self:'איזה אירוע קרוב מעסיק אותך, ואיך [אתה מרגיש|את מרגישה] לקראתו?' },
+  { id:'lm21', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'מי [היה החבר הכי קרוב של {ש}|הייתה החברה הכי קרובה של {ש}] בילדות?', self:'מי היה החבר או החברה הכי קרובים שלך בילדות?' },
+  { id:'lm22', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'אם לא היו מגבלות, באיזו עבודה {ש} [היה רוצה|הייתה רוצה] לעבוד?', self:'אם לא היו מגבלות, באיזו עבודה היית רוצה לעבוד?' },
+  { id:'lm23', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'אילו שני אנשים {ש} הכי [מעריך|מעריכה]?', self:'אילו שני אנשים [אתה הכי מעריך|את הכי מעריכה]?' },
+  { id:'lm24', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'לאיזה מקום {ש} [בורח|בורחת] בדמיון כשהכול עמוס?', self:'לאיזה מקום [אתה בורח|את בורחת] בדמיון כשהכול עמוס?' },
+  { id:'lm25', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'מה זיכרון הילדות הכי טוב של {ש}?', self:'מה זיכרון הילדות הכי טוב שלך?' },
+  { id:'lm26', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'במה {ש} [רוצה|רוצה] להשתפר בתקופה הקרובה?', self:'במה [אתה רוצה|את רוצה] להשתפר בתקופה הקרובה?' },
+  { id:'lm27', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'מה הרגע הכי מביך ש{ש} [זוכר|זוכרת], וכבר [מסוגל|מסוגלת] לצחוק עליו?', self:'מה הרגע הכי מביך [שאתה זוכר|שאת זוכרת], שכבר אפשר לצחוק עליו?' },
+  { id:'lm28', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:2, q:'איזה ערך הכי מנחה את {ש} בחיים?', self:'איזה ערך הכי מנחה אותך בחיים?' },
+  { id:'lm29', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'מה החשש הכי גדול של {ש} כרגע?', self:'מה החשש הכי גדול שלך כרגע?' },
+  { id:'lm30', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'מה הכי מעציב את {ש}?', self:'מה הכי מעציב אותך?' },
+  { id:'lm31', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'איזה חלום {ש} עוד לא [הגשים|הגשימה]?', self:'איזה חלום עוד לא הגשמת?' },
+  { id:'lm32', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'איזו שאיפה {ש} [שומר|שומרת] בלב, ועוד לא [דיבר|דיברה] עליה הרבה?', self:'איזו שאיפה [אתה שומר|את שומרת] בלב, ועוד לא דיברת עליה הרבה?' },
+  { id:'lm33', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'מה היה הרגע הכי מפחיד בילדות של {ש}?', self:'מה היה הרגע הכי מפחיד בילדות שלך?' },
+  { id:'lm34', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'מה שלושת הרגעים הכי מיוחדים בחיים של {ש}?', self:'מה שלושת הרגעים הכי מיוחדים בחיים שלך?' },
+  { id:'lm35', t:'guess', topic:'lovemap', modes:'p', about:'parent', lvl:3, q:'מה [הוא|היא] הדבר ש{ש} הכי [צריך|צריכה] כדי להרגיש [אהוב|אהובה]?', self:'מה הדבר [שאתה הכי צריך|שאת הכי צריכה] כדי להרגיש [אהוב|אהובה]?' },
+  { id:'dr1', t:'open', topic:'dreams', modes:'p', lvl:2, text:'במה היית רוצה שהחיים שלך ייראו אחרת בעוד שלוש שנים?' },
+  { id:'dr2', t:'open', topic:'dreams', modes:'p', lvl:1, text:'אם [היית יכול|היית יכולה] לרכוש מיד שלוש מיומנויות חדשות, מה [היית בוחר|היית בוחרת]?' },
+  { id:'dr3', t:'open', topic:'dreams', modes:'p', lvl:1, text:'אם [היית יכול|היית יכולה] לבחור מקצוע אחר לגמרי, מה [היית בוחר|היית בוחרת] ולמה?' },
+  { id:'dr4', t:'open', topic:'dreams', modes:'p', lvl:1, text:'איזו הרפתקה היית רוצה לחוות בשנים הקרובות?' },
+  { id:'dr5', t:'open', topic:'dreams', modes:'p', lvl:2, text:'מה החלומות שלך עכשיו, בשלב הזה של החיים?' },
+  { id:'dr6', t:'open', topic:'dreams', modes:'p', lvl:2, text:'מה השאיפות שלך בשבילנו כמשפחה?' },
+  { id:'dr7', t:'open', topic:'dreams', modes:'p', lvl:1, text:'אם [היית מתכנן|היית מתכננת] לנו בית חלומות, איך הוא היה נראה?' },
+  { id:'dr8', t:'open', topic:'dreams', modes:'p', lvl:3, text:'אחת המטרות שלך בחיים השתנתה לאחרונה? איך ולמה?' },
+  { id:'dr9', t:'open', topic:'dreams', modes:'p', lvl:3, text:'[כשאתה חושב|כשאת חושבת] על העתיד, מה הכי מדאיג אותך, ומה הכי מרגש?' },
+  { id:'dr10', t:'open', topic:'dreams', modes:'p', lvl:3, text:'מה חסר לך היום בחיים?' },
+  { id:'dr11', t:'open', topic:'dreams', modes:'p', lvl:2, text:'אילו בני אדם [אתה מקווה|את מקווה] שהילדים שלנו יהיו? יש לך גם חששות?' },
+  { id:'in1', t:'open', topic:'inner', modes:'p', lvl:2, text:'במה בחייך [אתה הכי גאה|את הכי גאה]? [ספר|ספרי] על קושי שהתגברת עליו.' },
+  { id:'in2', t:'open', topic:'inner', modes:'p', lvl:2, text:'איך ההורים שלך הראו לך שהם גאים בך כשהיית [ילד|ילדה]?' },
+  { id:'in3', t:'open', topic:'inner', modes:'p', lvl:3, text:'איך הראו אהבה בבית שבו גדלת, ומה מזה [לקחת|לקחת] איתך לזוגיות שלנו?' },
+  { id:'in4', t:'open', topic:'inner', modes:'p', lvl:2, text:'במה [אתה דומה|את דומה] להורים שלך כהורה, ובמה [אתה שונה|את שונה]?' },
+  { id:'in5', t:'open', topic:'inner', modes:'p', lvl:2, text:'מה היה הכי טוב והכי קשה בשבילך בגיל ההתבגרות?' },
+  { id:'in6', t:'open', topic:'inner', modes:'p', lvl:3, text:'אם [היית יכול|היית יכולה] לשנות דבר אחד מהעבר שלך, מה [היית משנה|היית משנה]?' },
+  { id:'in7', t:'open', topic:'inner', modes:'p', lvl:2, text:'מה היו נקודת השיא ונקודת השפל שלך בשנה האחרונה?' },
+  { id:'in8', t:'open', topic:'inner', modes:'p', lvl:2, text:'במה השתנית בשנה האחרונה?' },
+  { id:'in9', t:'open', topic:'inner', modes:'p', lvl:3, text:'איזו תקופה קשה עיצבה את מי [שאתה|שאת] היום, ומה עזר לך לעבור אותה?' },
+  { id:'in10', t:'open', topic:'inner', modes:'p', lvl:3, text:'מה היית רוצה שבן או בת הזוג יבינו [עליך|עלייך] טוב יותר?' },
+  { id:'in11', t:'open', topic:'inner', modes:'p', lvl:2, text:'מה הופך בעיניך חיים לחיים טובים?' },
+  { id:'in12', t:'open', topic:'inner', modes:'p', lvl:1, text:'אם [היית יכול|היית יכולה] לחיות שוב חמש שנים מהחיים שלך, אילו שנים [היית בוחר|היית בוחרת], ולמה?' },
+  { id:'in13', t:'open', topic:'inner', modes:'p', lvl:3, text:'איזו תכונה שלך היית רוצה לשנות, ואיזו [אתה הכי אוהב|את הכי אוהבת] בעצמך?' },
+  { id:'in14', t:'open', topic:'inner', modes:'p', lvl:2, text:'איך [אתה מרגיש|את מרגישה] בזמן האחרון לגבי העבודה שלך?' },
+  { id:'in15', t:'open', topic:'inner', modes:'p', lvl:1, text:'מה הדבר הכי מרגש שקורה לך בחיים עכשיו?' },
+  { id:'in16', t:'open', topic:'inner', modes:'p', lvl:2, text:'אילו תכונות הכי חשובות לך אצל חברים?' },
+  { id:'st1', t:'open', topic:'story', modes:'p', lvl:1, text:'מה היה הרושם הראשון שלך מבן או בת הזוג?' },
+  { id:'st2', t:'open', topic:'story', modes:'p', lvl:2, text:'מתי הבנת שזה האדם שאיתו [אתה רוצה|את רוצה] לבנות חיים?' },
+  { id:'st3', t:'open', topic:'story', modes:'p', lvl:1, text:'איזה רגע מתחילת הקשר שלנו [אתה הכי זוכר|את הכי זוכרת]?' },
+  { id:'st4', t:'open', topic:'story', modes:'p', lvl:3, text:'מה הייתה התקופה הכי קשה שלנו כזוג, ואיך עברנו אותה?' },
+  { id:'st5', t:'open', topic:'story', modes:'p', lvl:1, text:'איזה רגע מהחתונה, או מתחילת החיים המשותפים, הכי נשאר איתך?' },
+  { id:'st6', t:'open', topic:'story', modes:'p', lvl:2, text:'איזה זוג שאנחנו מכירים נראה לך דוגמה טובה, ומה מיוחד אצלם?' },
+  { id:'st7', t:'open', topic:'story', modes:'p', lvl:3, text:'במה הזוגיות שלנו דומה לזוגיות של ההורים שלך, ובמה היא שונה?' },
+  { id:'st8', t:'open', topic:'story', modes:'p', lvl:1, text:'מה הייתה התקופה הכי מאושרת שלנו יחד עד היום?' },
+  { id:'st9', t:'open', topic:'story', modes:'p', lvl:3, text:'מה למדנו על עצמנו מהתקופות הקשות?' },
+  { id:'ap1', t:'open', topic:'appreciate', modes:'p', lvl:1, text:'[בחר|בחרי] תכונה אחת [שאתה מעריך|שאת מעריכה] בבן או בת הזוג, [וספר|וספרי] על רגע שבו ראית אותה.' },
+  { id:'ap2', t:'open', topic:'appreciate', modes:'p', lvl:2, text:'על מה היית רוצה להגיד תודה לבן או בת הזוג, משהו שאולי לא אמרת עליו מעולם?' },
+  { id:'ap3', t:'open', topic:'appreciate', modes:'p', lvl:1, text:'במה בן או בת הזוג מצחיקים אותך כמו שאף אחד אחר לא מצליח?' },
+  { id:'ap4', t:'open', topic:'appreciate', modes:'p', lvl:1, text:'מתי לאחרונה הרגשת [גאה|גאה] בבן או בת הזוג?' },
+  { id:'ap5', t:'open', topic:'appreciate', modes:'p', lvl:2, text:'מה בן או בת הזוג עושים בשביל המשפחה, שאולי נראה מובן מאליו אבל ממש חשוב לך?' },
+  { id:'ap6', t:'open', topic:'appreciate', modes:'p', lvl:2, text:'מה למדת מבן או בת הזוג במהלך השנים?' },
+  { id:'ap7', t:'open', topic:'appreciate', modes:'p', lvl:1, text:'איזה רגע קטן מהשבוע האחרון גרם לך להרגיש אהבה כלפי בן או בת הזוג?' },
 ];
 
 // חידות ל"משימה משותפת": כל טלפון מקבל רק חלק מהרמזים
@@ -322,6 +410,7 @@ const TYPE_HINT = {
   puzzle: 'לכל אחד יש רק חלק מהרמזים. רק יחד פותרים!'
 };
 const SEQ = ['open', 'guess', 'empathy', 'open', 'guess', 'empathy', 'open', 'guess', 'open', 'empathy', 'guess', 'open']; // בלי חידות כלליות
+const SEQ_P = ['guess', 'open', 'guess', 'open', 'guess', 'empathy', 'open', 'guess', 'open', 'guess', 'open', 'empathy']; // זוגי: דגש על מפת האהבה ושיחה
 
 // ================= שכבת אחסון =================
 const cfg = window.FIREBASE_CONFIG || {};
@@ -349,7 +438,7 @@ function makeLocalStore() {
     async loadQuestions() { try { return JSON.parse(LS.getItem('fg_questions')) || []; } catch (e) { return []; } },
     async saveQuestion(q) { const a = await this.loadQuestions(); const i = a.findIndex(x => x.id === q.id); if (i >= 0) a[i] = q; else a.push(q); LS.setItem('fg_questions', JSON.stringify(a)); },
     async deleteQuestion(id) { const a = (await this.loadQuestions()).filter(x => x.id !== id); LS.setItem('fg_questions', JSON.stringify(a)); },
-    async seed(list) { LS.setItem('fg_questions', JSON.stringify(list)); },
+    async seed(list) { const a = await this.loadQuestions(); list.forEach(q => { const i = a.findIndex(x => x.id === q.id); if (i >= 0) a[i] = q; else a.push(q); }); LS.setItem('fg_questions', JSON.stringify(a)); },
     async saveSummary(s) { const a = await this.loadSummaries(); a.push(s); LS.setItem('fg_summaries', JSON.stringify(a)); },
     async loadSummaries() { try { return JSON.parse(LS.getItem('fg_summaries')) || []; } catch (e) { return []; } },
     async deleteSummary(id) { const a = (await this.loadSummaries()).filter(x => x.id !== id); LS.setItem('fg_summaries', JSON.stringify(a)); },
@@ -409,10 +498,14 @@ const P = id => (S.room && S.room.players && S.room.players[id]) || { name: '?',
 const gw = (p, m, f) => (p && p.gender === 'f') ? f : m;
 const canAnswer = (it, p) => !(it && it.type === 'open' && it.q && it.q.who) || (p && p.role === it.q.who);
 const WHO_LABEL = { parent: 'ההורים', child: 'הילדים' };
-const selCats = () => S.hostSel.cats || Object.keys(window.TOPICS).filter(k => window.TOPICS[k].general);
-function catsLabel(cats) {
+const topicModes = k => (window.TOPICS[k] && window.TOPICS[k].modes) || 'psf';
+const topicCore = k => { const t = window.TOPICS[k] || {}; return t.core || (t.general ? topicModes(k) : ''); };
+const visibleTopics = mode => Object.keys(window.TOPICS).filter(k => topicModes(k).includes(mode));
+const coreTopics = mode => visibleTopics(mode).filter(k => topicCore(k).includes(mode));
+const selCats = () => (S.hostSel.cats || coreTopics(S.hostSel.mode)).filter(k => topicModes(k).includes(S.hostSel.mode));
+function catsLabel(cats, mode) {
   if (!cats || !cats.length) return '';
-  const gen = Object.keys(window.TOPICS).filter(k => window.TOPICS[k].general);
+  const gen = mode ? coreTopics(mode) : Object.keys(window.TOPICS).filter(k => window.TOPICS[k].general);
   if (cats.length === gen.length && gen.every(k => cats.includes(k))) return 'המאגר הכללי';
   return cats.map(k => (window.TOPICS[k] || {}).name).filter(Boolean).join(', ');
 }
@@ -521,7 +614,7 @@ async function buildPlan(r) {
   try { bank = await store.loadQuestions(); } catch (e) { bank = []; }
   if (!bank.length) bank = window.DEFAULT_QUESTIONS;
   bank = bank.filter(q => q && !q.hidden && (q.modes || '').includes(mode));
-  const isGen = q => window.TOPICS[q.topic] && window.TOPICS[q.topic].general;
+  const isGen = q => topicCore(q.topic).includes(mode);
   const pool = t => {
     // שוזרים את הנושאים לסירוגין, כדי שכל נושא שנבחר יופיע במשחק
     const groups = shuffle(cats).map(c => shuffle(bank.filter(q => q.t === t && q.topic === c))).filter(g => g.length);
@@ -536,13 +629,22 @@ async function buildPlan(r) {
   let ptr = 0;
   const puzzles = shuffle(window.PUZZLES);
   const plan = [];
+  const seq = mode === 'p' ? SEQ_P : SEQ;
+  // עומק עולה: שליש ראשון קליל, אמצע אישי, סוף עמוק
+  const want = i => i < len / 3 ? 1 : i < 2 * len / 3 ? 2 : 3;
+  const pick = (arr, ok, i) => {
+    const c = arr.filter(ok); if (!c.length) return null;
+    const w = want(i); let best = c[0], bd = 9;
+    c.forEach(q => { const d = Math.abs((q.lvl || 2) - w); if (d < bd) { bd = d; best = q; } });
+    return best;
+  };
   for (let i = 0; i < len; i++) {
-    let t = SEQ[i % SEQ.length];
+    let t = seq[i % seq.length];
     let item = null;
     if (t === 'guess' || t === 'empathy') {
       for (let k = 0; k < ps.length && !item; k++) {
         const subj = ps[(ptr + k) % ps.length];
-        const q = pools[t].find(q => !used.has(q.id) && (q.about === 'any' || !q.about || q.about === subj.role));
+        const q = pick(pools[t], q => !used.has(q.id) && (q.about === 'any' || !q.about || q.about === subj.role), i);
         if (q) { item = { type: t, q, subjectId: subj.id }; used.add(q.id); ptr = (ptr + k + 1) % ps.length; }
       }
       if (!item) t = 'open';
@@ -556,7 +658,7 @@ async function buildPlan(r) {
       } else t = 'open';
     }
     if (t === 'open') {
-      const q = pools.open.find(q => !used.has(q.id) && (!q.who || ps.some(p => p.role === q.who)));
+      const q = pick(pools.open, q => !used.has(q.id) && (!q.who || ps.some(p => p.role === q.who)), i);
       if (q) { used.add(q.id); item = { type: 'open', q }; }
     }
     if (item) plan.push(item);
@@ -703,7 +805,8 @@ function renderLobby(r) {
   const ps = players(r);
   const host = isHost();
   const cs = selCats();
-  const chipGroup = gen => `<div class="choice" style="margin-bottom:6px">${Object.entries(window.TOPICS).filter(([, t]) => !!t.general === gen).map(([k, t]) => `<button data-c="${k}" class="${cs.includes(k) ? 'on' : ''}">${esc(t.name)}</button>`).join('')}</div>`;
+  const vis = visibleTopics(S.hostSel.mode), core = coreTopics(S.hostSel.mode);
+  const chipGroup = gen => `<div class="choice" style="margin-bottom:6px">${Object.entries(window.TOPICS).filter(([k]) => vis.includes(k) && core.includes(k) === gen).map(([k, t]) => `<button data-c="${k}" class="${cs.includes(k) ? 'on' : ''}">${esc(t.name)}</button>`).join('')}</div>`;
   app.innerHTML = `${demoBar()}
   <div class="card center"><div class="muted">קוד המשחק</div><div class="code">${esc(r.code)}</div>
   <div class="muted">כל אחד נכנס לקישור בטלפון שלו, לוחץ "הצטרפות" ומקליד את הקוד</div></div>
@@ -717,7 +820,7 @@ function renderLobby(r) {
     <label>מי משחק?</label>
     <div class="choice" id="mode">${Object.entries(MODES).map(([k, v]) => `<button data-v="${k}" class="${S.hostSel.mode === k ? 'on' : ''}">${v}</button>`).join('')}</div>
     <label>נושאים (אפשר לבחור כמה)</label>
-    <div class="muted" style="margin-bottom:4px">המאגר הכללי</div>${chipGroup(true)}
+    <div class="muted" style="margin-bottom:4px">${S.hostSel.mode === 'p' ? 'נושאי הזוגיות' : 'המאגר הכללי'}</div>${chipGroup(true)}
     <div class="muted" style="margin-bottom:4px">נושאים מיוחדים</div>${chipGroup(false)}
     <label>אורך המשחק</label>
     <div class="choice" id="len">${[[12, 'קצר, כ-25 דק׳'], [18, 'רגיל, כ-40 דק׳'], [24, 'ארוך, כ-55 דק׳']].map(([v, l]) => `<button data-v="${v}" class="${S.hostSel.len === v ? 'on' : ''}">${l}</button>`).join('')}</div>
@@ -733,7 +836,7 @@ function renderLobby(r) {
       if (i >= 0) { if (c.length === 1) return toast('צריך לבחור לפחות נושא אחד'); c.splice(i, 1); } else c.push(b.dataset.c);
       S.hostSel.cats = c; S.key = ''; renderGame();
     });
-    $('#mode').querySelectorAll('button').forEach(b => b.onclick = async () => { S.hostSel.mode = b.dataset.v; S.key = ''; renderGame(); if (r.trial) { try { await syncBots(b.dataset.v); } catch (e) { console.error(e); } } });
+    $('#mode').querySelectorAll('button').forEach(b => b.onclick = async () => { S.hostSel.mode = b.dataset.v; S.hostSel.cats = null; S.key = ''; renderGame(); if (r.trial) { try { await syncBots(b.dataset.v); } catch (e) { console.error(e); } } });
     $('#len').querySelectorAll('button').forEach(b => b.onclick = () => { S.hostSel.len = +b.dataset.v; S.key = ''; renderGame(); });
     const ab = $('#addBots'); if (ab) ab.onclick = async () => {
       ab.disabled = true;
@@ -766,14 +869,21 @@ function updateWaiting() {
   if (r.status === 'playing' && r.plan[r.idx].type === 'puzzle') { w.textContent = ''; return; }
   w.innerHTML = missing.length ? 'מחכים ל: ' + missing.map(p => esc(p.name)).join(', ') : '<b style="color:var(--ok)">כולם ענו ✓</b>';
   const hb = $('#hostAdvance');
-  if (hb) hb.classList.toggle('coral', !missing.length);
+  if (hb) {
+    hb.classList.toggle('coral', !missing.length);
+    hb.classList.toggle('locked', missing.length > 0);
+    hb.dataset.missing = missing.map(p => p.name).join(', ');
+  }
 }
 
 function hostBar(label, fn, extra) {
   if (!isHost()) return `<p class="muted center">${esc(P(S.room.hostId).name)} ${P(S.room.hostId).gender === 'f' ? 'תעביר' : 'יעביר'} לשלב הבא</p>`;
   setTimeout(() => {
-    const b = $('#hostAdvance'); if (b) b.onclick = async () => { b.disabled = true; try { await fn(); } catch (e) { console.error(e); b.disabled = false; toast('משהו השתבש'); } };
-    const s = $('#hostSkip'); if (s) s.onclick = async () => { s.disabled = true; await nextRound(true); };
+    const b = $('#hostAdvance'); if (b) b.onclick = async () => {
+      const miss = b.dataset.missing;
+      if (miss && !(await askConfirm(`עוד לא כולם סיימו. מחכים ל: ${miss}.\nלהמשיך בכל זאת?`))) return;
+      b.disabled = true; try { await fn(); } catch (e) { console.error(e); b.disabled = false; toast('משהו השתבש'); } };
+    const s = $('#hostSkip'); if (s) s.onclick = async () => { if (!(await askConfirm('לדלג על השאלה הזאת לכולם?'))) return; s.disabled = true; await nextRound(true); };
   }, 0);
   return `<button class="btn" id="hostAdvance">${label}</button>${extra ? '' : '<button class="btn ghost" id="hostSkip">דילוג על הסבב</button>'}`;
 }
@@ -814,7 +924,7 @@ function renderRound(r) {
     } else {
       body = `<div class="q">${esc(qt)}</div>` +
         players(r).filter(p => canAnswer(it, p)).map(p => { const x = a[p.id]; return `<div class="ans"><b>${esc(p.name)}</b>${x ? (x.skip ? `<span class="muted">${gw(p,'דילג','דילגה')} הפעם</span>` : esc(x.v)) : `<span class="muted">${gw(p,'לא ענה','לא ענתה')}</span>`}</div>`; }).join('') +
-        `<p class="muted">רגע לשאול: מה הפתיע אתכם? למי יש שאלת המשך?</p>` + hostBar('לסבב הבא', () => nextRound(false), true);
+        (r.mode === 'p' ? `<div class="help">💬 עכשיו כל אחד שואל את השני <b>שאלת המשך</b> אחת על מה שסיפר, ומקשיב עד הסוף. בלי עצות ובלי שיפוט, רק סקרנות.</div>` : `<p class="muted">רגע לשאול: מה הפתיע אתכם? למי יש שאלת המשך?</p>`) + hostBar('לסבב הבא', () => nextRound(false), true);
     }
   }
 
@@ -974,7 +1084,7 @@ function finalCard(r) {
   const d = new Date();
   const rows = players(r).map(p => { const c = (r.closing || {})[p.id]; return c ? `<div class="ans"><b>${esc(p.name)}</b>${c.a ? '✨ ' + esc(c.a) : ''}${c.b ? `<div style="margin-top:4px">🤝 ${esc(c.b)}</div>` : ''}${c.c ? `<div style="margin-top:4px">🗓️ ${esc(c.c)}</div>` : ''}</div>` : ''; }).join('');
   return `<div class="card final"><div class="center"><div class="logo" style="font-size:40px">🫶</div><h2>מה לקחנו מהערב</h2>
-    <div class="muted">${d.toLocaleDateString('he-IL')} · ${esc(MODES[r.mode] || '')}${catsLabel(r.cats) ? ' · ' + esc(catsLabel(r.cats)) : ''}</div>
+    <div class="muted">${d.toLocaleDateString('he-IL')} · ${esc(MODES[r.mode] || '')}${catsLabel(r.cats, r.mode) ? ' · ' + esc(catsLabel(r.cats, r.mode)) : ''}</div>
     <p class="big" style="margin-top:10px">צברנו יחד ❤️ ${r.score || 0} נקודות</p></div>
     ${rows || '<p class="muted center">לא נכתבו תשובות</p>'}
     <p class="muted center" style="margin-top:12px">📸 צלמו מסך והביאו את הכרטיס לפגישה הבאה</p></div>`;
@@ -1194,7 +1304,7 @@ function summarySections(src, viewerId) {
   const ideas = ps.map(p => (src.closing || {})[p.id]).filter(c => c && c.c).map(c => '🗓️ ' + c.c);
   if (ideas.length) sections.push({ h: 'רעיונות לבילוי המשפחתי החודשי', items: [{ lines: ideas }] });
   const date = new Date(src.createdAt || Date.now()).toLocaleDateString('he-IL');
-  const meta = `${date} · ${MODES[src.mode] || ''}${catsLabel(src.cats) ? ' · ' + catsLabel(src.cats) : ''} · ❤️ ${src.score || 0} נקודות משפחתיות`;
+  const meta = `${date} · ${MODES[src.mode] || ''}${catsLabel(src.cats, src.mode) ? ' · ' + catsLabel(src.cats, src.mode) : ''} · ❤️ ${src.score || 0} נקודות משפחתיות`;
   const title = viewerId ? `הסיכום האישי של ${PP(viewerId).name}` : `סיכום משחק: ${src.family || 'משפחה ללא שם'}`;
   const who = ps.map(p => `${p.name} (${p.role === 'parent' ? (p.gender === 'f' ? 'אמא' : 'אבא') : (p.gender === 'f' ? 'ילדה' : 'ילד')})`).join(', ');
   return { title, meta, who, sections };
@@ -1263,6 +1373,7 @@ async function adminHome(user) {
     ${!adminList.length ? `<div class="card"><p>המאגר שלך עוד ריק, אז המשחק משתמש במאגר ההתחלה (${window.DEFAULT_QUESTIONS.length} שאלות).</p>
       <p class="muted">כדי לערוך או להוסיף שאלות, טעני קודם את מאגר ההתחלה. אחר כך כל שינוי שלך ייכנס למשחק.</p>
       <button class="btn" id="seed">טעינת מאגר ההתחלה</button></div>` : `
+    ${(() => { const have = new Set(adminList.map(q => q.id)); const miss = window.DEFAULT_QUESTIONS.filter(q => !have.has(q.id)); return miss.length ? `<div class="card" style="background:var(--mint-l,#E6F5F2)"><p><b>יש ${miss.length} שאלות בגרסה החדשה שעוד לא במאגר שלך.</b></p><p class="muted">השאלות שכבר במאגר, כולל מה שערכת, לא ישתנו.</p><button class="btn" id="addNew">הוספת השאלות החדשות</button></div>` : ''; })()}
     <button class="btn coral" id="add">+ שאלה חדשה</button>
     <div class="row"><select id="ft"><option value="">כל הסוגים</option>${['open', 'guess', 'empathy'].map(t => `<option value="${t}" ${f.t === t ? 'selected' : ''}>${TYPE_LABEL[t]}</option>`).join('')}</select>
     <select id="ftopic"><option value="">כל הנושאים</option>${topicOpts}</select></div>
@@ -1274,6 +1385,7 @@ async function adminHome(user) {
   $('#back').onclick = () => { location.hash = ''; };
   $('#tabSum').onclick = () => adminSummaries(user);
   const out = $('#out'); if (out) out.onclick = () => store.signOut();
+  const an = $('#addNew'); if (an) an.onclick = async () => { an.disabled = true; const have = new Set(adminList.map(q => q.id)); await store.seed(window.DEFAULT_QUESTIONS.filter(q => !have.has(q.id))); toast('השאלות נוספו'); adminHome(user); };
   const seed = $('#seed'); if (seed) seed.onclick = async () => { seed.disabled = true; await store.seed(window.DEFAULT_QUESTIONS); toast('המאגר נטען'); adminHome(user); };
   const add = $('#add'); if (add) add.onclick = () => editQuestion(null, user);
   const ft = $('#ft'); if (ft) ft.onchange = e => { f.t = e.target.value; adminHome(user); };
@@ -1320,15 +1432,17 @@ function editQuestion(q, user) {
        <label>הנוסח שהמשתתף עצמו רואה (בגוף שני)</label><textarea id="self">${esc(n.self)}</textarea>
        <label>על מי השאלה יכולה להיות?</label><select id="about"><option value="any">כל אחד</option><option value="parent">רק הורה</option><option value="child">רק ילד או ילדה</option></select>`}
     <label>נושא</label><select id="topic">${Object.entries(window.TOPICS).map(([k, t]) => `<option value="${k}">${esc(t.name)}${t.general ? ' (מאגר כללי)' : ''}</option>`).join('')}</select>
+    <label>עומק השאלה</label><select id="lvl"><option value="1">קלילה (לתחילת המשחק)</option><option value="2">אישית</option><option value="3">עמוקה (לסוף המשחק)</option></select>
     <label>מתאים למצבים</label><div class="checks">${Object.entries(MODES).map(([k, v]) => `<label><input type="checkbox" value="${k}" ${n.modes.includes(k) ? 'checked' : ''}> ${v}</label>`).join('')}</div>
     <div class="card" id="prev"></div>
     <button class="btn" id="save">שמירה</button><button class="btn ghost" id="cancel">ביטול</button>`;
     const ab = $('#about'); if (ab) ab.value = n.about || 'any';
     const wh = $('#who'); if (wh) wh.value = n.who || '';
     $('#topic').value = n.topic;
+    $('#lvl').value = String(n.lvl || 2);
     const read = () => {
       if ($('#text')) n.text = $('#text').value; if ($('#qq')) n.q = $('#qq').value; if ($('#self')) n.self = $('#self').value;
-      if (ab) n.about = ab.value; if (wh) n.who = wh.value; n.topic = $('#topic').value;
+      if (ab) n.about = ab.value; if (wh) n.who = wh.value; n.topic = $('#topic').value; n.lvl = +$('#lvl').value;
       n.modes = Array.from(app.querySelectorAll('.checks input:checked')).map(i => i.value).join('');
     };
     const prev = () => {
@@ -1347,7 +1461,7 @@ function editQuestion(q, user) {
       if (n.t === 'open' ? !n.text.trim() : (!n.q.trim() || !n.self.trim())) return toast('חסר נוסח לשאלה');
       if (n.t !== 'open' && !n.q.includes('{ש}')) return toast('בנוסח שכולם רואים צריך להופיע {ש}');
       if (!n.modes) return toast('בחרי לפחות מצב אחד');
-      const clean = { id: n.id, t: n.t, topic: n.topic, modes: n.modes, hidden: !!n.hidden };
+      const clean = { id: n.id, t: n.t, topic: n.topic, modes: n.modes, hidden: !!n.hidden }; if (n.lvl) clean.lvl = n.lvl;
       if (n.t === 'open') { clean.text = n.text.trim(); if (n.who) clean.who = n.who; } else { clean.q = n.q.trim(); clean.self = n.self.trim(); clean.about = n.about || 'any'; }
       try { await store.saveQuestion(clean); toast('נשמר'); adminHome(user); } catch (e) { console.error(e); toast('השמירה נכשלה'); }
     };
